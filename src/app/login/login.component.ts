@@ -10,7 +10,8 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
 
-  loginErrorsMessage:string=' ';
+  loginResultMessage:string=' ';
+
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
@@ -22,19 +23,20 @@ export class LoginComponent implements OnInit {
     requestbody.set('username', username);
     requestbody.set('password', password);
     requestbody.set('grant_type', "password");
+    this.loginResultMessage = " ";
     this.http.post<any>(tokenurl, requestbody.toString(), { headers: {"Content-Type": "application/x-www-form-urlencoded"}}).pipe( 
       catchError((e:any) => {
         if(e.error.hasOwnProperty("error") && e.error.error == "invalid_grant"){
-          this.loginErrorsMessage = "Login or password is incorrect";
+          this.loginResultMessage = "Login or password is incorrect";
         } else{
-          this.loginErrorsMessage = "Cann't login, try again later";
+          this.loginResultMessage = "Cann't login, try again later";
         }
         return of(null);
       })
     ).subscribe(response => {
       if(response != null && response.hasOwnProperty("access_token")){
           sessionStorage.setItem("access_token", response.access_token);
-          this.loginErrorsMessage = " "
+          this.loginResultMessage = " Success ";
       }
      });
   }

@@ -1,0 +1,19 @@
+<div>
+  Create new account: <br>
+  <label> Email: <input #usernameInput type="email"> </label> <br>
+  <label> Password: <input #passwordInput type="password"> </label> <br>
+  <label> Repeat Password: <input #passwordConfirmInput type="password"> </label> <br>
+  {{registrationResultMessage}}  <br>
+  <div #registrationErrors *ngIf="registrationErrorMessages">
+    Error list:
+    <ul>
+      <li *ngFor="let errorlistnamevaluepair of generateArray(registrationErrorMessages)"> 
+        {{errorlistnamevaluepair.name}}
+        <ul>
+          <li *ngFor="let singleerror of errorlistnamevaluepair.value">{{singleerror}}</li>
+        </ul>
+      </li>
+    </ul>
+    </div>
+  <input type="submit" value="Create Account" (click)="SendRegistrationdata(usernameInput.value,passwordInput.value,passwordConfirmInput.value)"> <br>
+</div>

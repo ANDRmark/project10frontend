@@ -1,8 +1,8 @@
 <div>
   Login to your account: <br>
-  <label> Username: <input #usernameInput type="email"> </label> <br>
+  <label> Email: <input #emailInput type="email"> </label> <br>
   <label> Password: <input #passwordInput type="password"> </label> <br>
 
-  <div #loginErrors> {{ loginErrorsMessage }}</div>
-  <input type="submit" value="Log in" (click)="SendLoginAndPassword(usernameInput.value,passwordInput.value)"> <br>
+  <div #loginErrors> {{ loginResultMessage }}</div>
+  <input type="submit" value="Log in" (click)="SendLoginAndPassword(emailInput.value,passwordInput.value)"> <br>
 </div>
