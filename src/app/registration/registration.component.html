@@ -3,7 +3,7 @@
   <label> Email: <input #usernameInput type="email"> </label> <br>
   <label> Password: <input #passwordInput type="password"> </label> <br>
   <label> Repeat Password: <input #passwordConfirmInput type="password"> </label> <br>
-  {{registrationResultMessage}}  <br>
+  <div #registrationResultMessageContainer>{{registrationResultMessage}} <br></div>
   <div #registrationErrors *ngIf="registrationErrorMessages">
     Error list:
     <ul>

@@ -3,6 +3,6 @@
   <label> Email: <input #emailInput type="email"> </label> <br>
   <label> Password: <input #passwordInput type="password"> </label> <br>
 
-  <div #loginErrors> {{ loginResultMessage }}</div>
+  <div #loginErrors> {{ loginResultMessage }} <br></div>
   <input type="submit" value="Log in" (click)="SendLoginAndPassword(emailInput.value,passwordInput.value)"> <br>
 </div>

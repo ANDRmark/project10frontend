@@ -11,7 +11,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 export class RegistrationComponent implements OnInit {
 
   registrationErrorMessages :any = null;
-  registrationResultMessage='';
+  registrationResultMessage:string= " ";
   constructor(private http: HttpClient) { }
 
   ngOnInit() {

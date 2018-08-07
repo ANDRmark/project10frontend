@@ -10,7 +10,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
 
-  loginResultMessage:string=' ';
+  loginResultMessage:string= " ";
 
   constructor(private http: HttpClient) { }
 
