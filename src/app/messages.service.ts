@@ -12,15 +12,16 @@ export class MessagesService {
 
   constructor(private http: HttpClient, private authenticationService:AuthenticationService) { }
 
-  getMessages(id:number):Observable<any>{
-    var url = "/api/Forum/GetMessages/"+id;
+  getMessagesByThemeId(id:number):Observable<any>{
+    var url = "/api/Message/GetMessagesByThemeId/"+id;
     var headers = new HttpHeaders();
-    if(this.authenticationService.isAuthenticated){
-      headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
+    if(this.authenticationService.isAuthenticated()){
+      var t = this.authenticationService.retrieveStoredAccessToken();
+      headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, {"headers": headers}).pipe( 
       catchError((e:any) => {
-        console.log("Got error when try to get /api/Forum/GetThemes");
+        console.log("Got error when try to get /api/Message/GetMessagesByThemeId/");
         return of(null);
       })
     );

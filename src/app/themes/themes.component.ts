@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
 import {ThemeService} from '../theme.service';
+import {Message, Theme} from '../models';
+
 
 @Component({
   selector: 'app-themes',
@@ -9,30 +12,27 @@ import {ThemeService} from '../theme.service';
 })
 export class ThemesComponent implements OnInit, OnDestroy {
 
-  getThemesSubscription:Subscription = null;
+  private ngUnsubscribe: Subject<object> = new Subject();
   errorMessage : string = " ";
-
   themes:Theme[];
 
   constructor(private themeService:ThemeService) { }
 
   ngOnInit() {
     this.getThemes();
+    console.log("getThemes");
   }
   ngOnDestroy(){
-    this.unsubscribe();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
-  unsubscribe(){
-    if(this.getThemesSubscription != null){
-      this.getThemesSubscription.unsubscribe()
-    }
-  }
 
   getThemes(){
-    this.unsubscribe();
     this.themes = [];
-    this.getThemesSubscription = this.themeService.getThemes().subscribe(data => {
+    this.themeService.getThemes()
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(data => {
       if(data == null || !data.hasOwnProperty("themes")){
         this.errorMessage = "An error occured, try again later";
       }
@@ -52,9 +52,3 @@ export class ThemesComponent implements OnInit, OnDestroy {
 
 }
 
-export class Theme{
-
-  public ThemeName:string;
-  public ThemeId:number;
-  public CreateDate:Date;
-}

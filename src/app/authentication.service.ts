@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -11,23 +11,43 @@ const  tokenurl = "/api/Token";
 @Injectable({
     providedIn: 'root'
   })
-export class AuthenticationService {
+export class AuthenticationService  implements OnInit{
+
+    rememberMe:boolean=false;
 
     constructor(private http: HttpClient) {}
 
+    ngOnInit(){
+        if(localStorage.getItem(localStorageEntryTokenName) != null){
+            this.rememberMe = true;
+        } else {
+            this.rememberMe = false;
+        }
+    }
+
+    getStorage():Storage{
+        if(this.rememberMe){
+            return localStorage; 
+        } else {
+            return sessionStorage;
+        }
+    }
+
     public isAuthenticated():boolean{
-        var tokenStringified = localStorage.getItem(localStorageEntryTokenName);
+        var tokenStringified = this.getStorage().getItem(localStorageEntryTokenName);
         if(tokenStringified == null){ return false}
 
         var token = JSON.parse(tokenStringified);
         if(token != null &&
             token.access_token != null &&
-            token[".expires"].getTime() > Date.now()){
+            new  Date(token[".expires"]).getTime()> Date.now()){
             return true;
         }
         return false;
     }
-    public SendLoginAndPasswordAndStoreToken(username:string, password:string):Observable<AuthenticationResult>{
+    public SendLoginAndPasswordAndStoreToken(username:string, password:string, rememberMe:boolean=false):Observable<AuthenticationResult>{
+        this.LogOut();
+        this.rememberMe = rememberMe;
         var requestbody = new URLSearchParams();
         requestbody.set('username', username);
         requestbody.set('password', password);
@@ -35,7 +55,7 @@ export class AuthenticationService {
         return this.http.post<any>(tokenurl, requestbody.toString(), { headers: {"Content-Type": "application/x-www-form-urlencoded"}}).pipe(
             map(response => {
                 if(response != null){
-                    localStorage.setItem(localStorageEntryTokenName,JSON.stringify(response));
+                    this.getStorage().setItem(localStorageEntryTokenName,JSON.stringify(response));
                     return {isSuccessful:true, errorMessage:null};
                 }
                 return {isSuccessful:false, errorMessage:null};
@@ -51,10 +71,11 @@ export class AuthenticationService {
     }
     public LogOut(){
         localStorage.removeItem(localStorageEntryTokenName);
+        sessionStorage.removeItem(localStorageEntryTokenName);
     }
 
     public retrieveStoredAccessToken():string{
-        var tokenStringified = localStorage.getItem(localStorageEntryTokenName);
+        var tokenStringified = this.getStorage().getItem(localStorageEntryTokenName);
         if(tokenStringified == null){ return null}
         return JSON.parse(tokenStringified).access_token;
     }

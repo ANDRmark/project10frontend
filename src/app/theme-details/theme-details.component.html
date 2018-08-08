@@ -1,3 +1,23 @@
 <div>
-  
+    <div>{{ errorMessage1 }} <br></div>
+  <div #ThemeDetailsHeader *ngIf="theme">
+        <span>Theme: {{theme.ThemeName}}</span><br>
+        <!-- <span>{{theme.CreateDate.toISOString().split("T")[0] + " " +theme.CreateDate.toLocaleTimeString().split(' ')[0]}}</span><br> -->
+  </div>
+  <div *ngIf="messgages">
+      Messages: <br><br>
+      <div>
+          <div *ngFor="let m of messgages">
+              <div class="messageContainer">
+                <div class="messageHeader">
+                    <span>Author: {{m.Author}} </span><br>
+                    <span>{{m.CreateDate.toISOString().split("T")[0] + " " +m.CreateDate.toLocaleTimeString().split(' ')[0]}}</span> <br>
+                </div>
+                <div>
+                    {{m.MessageBody}}
+                </div>
+              </div><br>
+          </div>
+      </div>
+  </div>
 </div>
