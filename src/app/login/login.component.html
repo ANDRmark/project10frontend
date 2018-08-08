@@ -4,5 +4,5 @@
   <label> Password: <input #passwordInput type="password"> </label> <br>
 
   <div #loginErrors> {{ loginResultMessage }} <br></div>
-  <input type="submit" value="Log in" (click)="SendLoginAndPassword(emailInput.value,passwordInput.value)"> <br>
+  <input type="button" value="Log in" (click)="SendLoginAndPassword(emailInput.value,passwordInput.value)"> <br>
 </div>

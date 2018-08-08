@@ -8,12 +8,12 @@ import {AuthenticationService} from './authentication.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ThemeService {
+export class MessagesService {
 
   constructor(private http: HttpClient, private authenticationService:AuthenticationService) { }
 
-  getThemes():Observable<any>{
-    var url = "/api/Forum/GetThemes";
+  getMessages(id:number):Observable<any>{
+    var url = "/api/Forum/GetMessages/"+id;
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated){
       headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
@@ -24,9 +24,5 @@ export class ThemeService {
         return of(null);
       })
     );
-  }
-
-  getTheme(id:number){
-
   }
 }

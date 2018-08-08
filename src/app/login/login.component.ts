@@ -1,44 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+
+import{AuthenticationService} from '../authentication.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+
+  getLoginResultSubscription:Subscription;
 
   loginResultMessage:string= " ";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authenticationService:AuthenticationService) { }
 
   ngOnInit() {
   }
+  ngOnDestroy(){
+    this.unsubscribe();
+  }
+
+  unsubscribe(){
+    if(this.getLoginResultSubscription != null){
+      this.getLoginResultSubscription.unsubscribe()
+    }
+  }
 
   SendLoginAndPassword(username:string, password:string){
-    var tokenurl = "/api/Token";
-    var requestbody = new URLSearchParams();
-    requestbody.set('username', username);
-    requestbody.set('password', password);
-    requestbody.set('grant_type', "password");
-    this.loginResultMessage = " ";
-    this.http.post<any>(tokenurl, requestbody.toString(), { headers: {"Content-Type": "application/x-www-form-urlencoded"}}).pipe( 
-      catchError((e:any) => {
-        if(e.error.hasOwnProperty("error") && e.error.error == "invalid_grant"){
-          this.loginResultMessage = "Login or password is incorrect";
-        } else{
-          this.loginResultMessage = "Cann't login, try again later";
-        }
-        return of(null);
-      })
-    ).subscribe(response => {
-      if(response != null && response.hasOwnProperty("access_token")){
-          sessionStorage.setItem("access_token", response.access_token);
+    this.unsubscribe();
+    this.loginResultMessage = "  ";
+    this.getLoginResultSubscription = this.authenticationService.SendLoginAndPasswordAndStoreToken(username,password).subscribe(
+      result => {
+        if(result.isSuccessful){
           this.loginResultMessage = " Success ";
+        } else{
+          this.loginResultMessage = result.errorMessage;
+        }
       }
-     });
+    );
   }
 
 }

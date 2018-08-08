@@ -42,7 +42,13 @@ export class RegistrationComponent implements OnInit {
   }
 
   generateArray(obj){
-    return Object.keys(obj).map((key)=> { return { name:key, value: obj[key]}});
+    var errormessages = Array();
+    Object.keys(obj).forEach(key=>{
+      if(obj[key] instanceof Array){
+        errormessages.push({ name:key, value: obj[key]})
+      }
+    });
+    return errormessages;
  }
 
 }
