@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import {ThemeService} from '../theme.service';
 import {Message, Theme} from '../models';
+import { catchError, map, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -31,12 +32,15 @@ export class ThemesComponent implements OnInit, OnDestroy {
   getThemes(){
     this.themes = [];
     this.themeService.getThemes()
-    .pipe(takeUntil(this.ngUnsubscribe))
+    .pipe(
+      catchError((e:any) => {
+      console.log("Got error when try to get /api/Forum/GetThemes");
+      this.errorMessage = "An error occured, try again later";
+      return of(null);
+    }),
+    takeUntil(this.ngUnsubscribe))
     .subscribe(data => {
-      if(data == null || !data.hasOwnProperty("themes")){
-        this.errorMessage = "An error occured, try again later";
-      }
-      else{
+      if(data != null && data.hasOwnProperty("themes")){
         this.errorMessage = " ";
         this.themes = new Array();
         for(let theme of data.themes){

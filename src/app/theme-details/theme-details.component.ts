@@ -3,9 +3,10 @@ import { Location } from '@angular/common';
 import { ThemeService } from '../theme.service';
 import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of  } from 'rxjs';
 import {MessagesService} from '../messages.service';
 import {Message, Theme} from '../models';
+import { catchError, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-theme-details',
@@ -15,7 +16,7 @@ import {Message, Theme} from '../models';
 export class ThemeDetailsComponent implements OnInit {
   private ngUnsubscribe: Subject<object> = new Subject();
   themeID:number;
-  errorMessage1:string = " ";
+  errorMessage:string = " ";
   theme:Theme=null;
   messgages:Message[]=null;
 
@@ -39,12 +40,15 @@ export class ThemeDetailsComponent implements OnInit {
   }
 
   getTheme(){
-    this.themeService.getTheme(this.themeID).pipe(takeUntil(this.ngUnsubscribe))
+    this.themeService.getTheme(this.themeID).pipe(
+      catchError((e:any) => {
+      console.log("Got error when try to get api/Theme/GetTheme/");
+      this.errorMessage += "  Error occured while getting information abouth theme. ";
+      return of(null);
+    }),
+    takeUntil(this.ngUnsubscribe))
     .subscribe(data => {
-      if(data == null || !data.hasOwnProperty("theme")){
-        this.errorMessage1 += "  Cannt Get information abouth theme. ";
-      }
-      else{
+      if(data != null && data.hasOwnProperty("theme")){
         this.theme = {
           ThemeName:data.theme.Title,
           ThemeId:data.theme.Id,
@@ -57,12 +61,15 @@ export class ThemeDetailsComponent implements OnInit {
   getMessages(){
     this.themeID = +this.route.snapshot.paramMap.get('id');
     this.messageService.getMessagesByThemeId(this.themeID)
-    .pipe(takeUntil(this.ngUnsubscribe))
+    .pipe(
+      catchError((e:any) => {
+        console.log("Got error when try to get /api/Message/GetMessagesByThemeId/");
+        this.errorMessage += "  Error occured while getting information abouth messages of that theme. ";
+        return of(null);
+      }),
+      takeUntil(this.ngUnsubscribe))
     .subscribe(data => {
-      if(data == null || !data.hasOwnProperty("messages")){
-        this.errorMessage1 += "  Cannt Get information abouth messages of that theme. ";
-      }
-      else{
+      if(data != null && data.hasOwnProperty("messages")){
         this.messgages = new Array();
         for(let message of data.messages){
           this.messgages.push({

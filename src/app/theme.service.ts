@@ -18,12 +18,7 @@ export class ThemeService {
     if(this.authenticationService.isAuthenticated()){
       headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
     }
-    return this.http.get<any>(url, {"headers": headers}).pipe( 
-      catchError((e:any) => {
-        console.log("Got error when try to get /api/Forum/GetThemes");
-        return of(null);
-      })
-    );
+    return this.http.get<any>(url, {"headers": headers});
   }
 
   getTheme(id:number){
@@ -32,11 +27,6 @@ export class ThemeService {
     if(this.authenticationService.isAuthenticated()){
       headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
     }
-    return this.http.get<any>(url, {"headers": headers}).pipe( 
-      catchError((e:any) => {
-        console.log("Got error when try to get api/Theme/GetTheme/");
-        return of(null);
-      })
-    );
+    return this.http.get<any>(url, {"headers": headers});
   }
 }

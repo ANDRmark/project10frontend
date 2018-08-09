@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 
 const localStorageEntryTokenName = "AuthorizationToken";
-const  tokenurl = "/api/Token";
+const  tokenurl = "/Token";
 
 @Injectable({
     providedIn: 'root'

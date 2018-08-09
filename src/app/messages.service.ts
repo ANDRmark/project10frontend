@@ -19,11 +19,6 @@ export class MessagesService {
       var t = this.authenticationService.retrieveStoredAccessToken();
       headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
     }
-    return this.http.get<any>(url, {"headers": headers}).pipe( 
-      catchError((e:any) => {
-        console.log("Got error when try to get /api/Message/GetMessagesByThemeId/");
-        return of(null);
-      })
-    );
+    return this.http.get<any>(url, {"headers": headers});
   }
 }
