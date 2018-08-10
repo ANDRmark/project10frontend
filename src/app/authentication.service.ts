@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of , Subject} from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
@@ -12,6 +12,9 @@ const  tokenurl = "/Token";
     providedIn: 'root'
   })
 export class AuthenticationService  implements OnInit{
+
+    authentcationStateChange:Subject<AuthenticationState> = new Subject();
+    currentState:AuthenticationState={isAuthenticated:false, user:null}
 
     rememberMe:boolean=false;
 
@@ -33,17 +36,24 @@ export class AuthenticationService  implements OnInit{
         }
     }
 
-    public isAuthenticated():boolean{
+    public updateState(){
         var tokenStringified = this.getStorage().getItem(localStorageEntryTokenName);
-        if(tokenStringified == null){ return false}
-
-        var token = JSON.parse(tokenStringified);
+        var token = null;
+        if(tokenStringified != null){ 
+            var token = JSON.parse(tokenStringified);
+        }
         if(token != null &&
             token.access_token != null &&
             new  Date(token[".expires"]).getTime()> Date.now()){
-            return true;
+                this.currentState = {isAuthenticated:true, user:token["userName"]}
+        } else{
+            this.currentState = {isAuthenticated:false, user:null};
         }
-        return false;
+        this.authentcationStateChange.next(this.currentState);
+    }
+
+    public isAuthenticated():boolean{
+        return this.currentState.isAuthenticated;
     }
     public SendLoginAndPasswordAndStoreToken(username:string, password:string, rememberMe:boolean=false):Observable<AuthenticationResult>{
         this.LogOut();
@@ -56,6 +66,7 @@ export class AuthenticationService  implements OnInit{
             map(response => {
                 if(response != null){
                     this.getStorage().setItem(localStorageEntryTokenName,JSON.stringify(response));
+                    this.updateState();
                     return {isSuccessful:true, errorMessage:null};
                 }
                 return {isSuccessful:false, errorMessage:null};
@@ -72,6 +83,7 @@ export class AuthenticationService  implements OnInit{
     public LogOut(){
         localStorage.removeItem(localStorageEntryTokenName);
         sessionStorage.removeItem(localStorageEntryTokenName);
+        this.updateState();
     }
 
     public retrieveStoredAccessToken():string{
@@ -84,6 +96,10 @@ export class AuthenticationService  implements OnInit{
 export class AuthenticationResult{
     public isSuccessful:boolean;
     public errorMessage:string;
+}
+export class AuthenticationState{
+    public isAuthenticated:boolean;
+    public user:string;
 }
 
 

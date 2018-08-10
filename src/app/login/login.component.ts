@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subscription,Subject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-
+import { ActivatedRoute } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import {Router} from "@angular/router";
 import{AuthenticationService} from '../authentication.service';
 
 @Component({
@@ -11,37 +13,47 @@ import{AuthenticationService} from '../authentication.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-
-  getLoginResultSubscription:Subscription;
+  private ngUnsubscribe: Subject<object> = new Subject();
 
   loginResultMessage:string= " ";
 
-  constructor(private http: HttpClient, private authenticationService:AuthenticationService) { }
+  constructor(
+    private http: HttpClient,
+    private authenticationService:AuthenticationService,
+    private route:ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit() {
+    this.route.data.
+    pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+      data => {
+        if(data != null && data.hasOwnProperty("logout") && data.logout == true){
+        this.authenticationService.LogOut();
+      }
+    });
   }
   ngOnDestroy(){
-    this.unsubscribe();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
-  unsubscribe(){
-    if(this.getLoginResultSubscription != null){
-      this.getLoginResultSubscription.unsubscribe()
-    }
-  }
+
 
   SendLoginAndPassword(username:string, password:string){
-    this.unsubscribe();
     this.loginResultMessage = "  ";
-    this.getLoginResultSubscription = this.authenticationService.SendLoginAndPasswordAndStoreToken(username,password).subscribe(
+    this.authenticationService.SendLoginAndPasswordAndStoreToken(username,password)
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(
       result => {
         if(result.isSuccessful){
           this.loginResultMessage = " Success ";
+          this.router.navigate(['/']);
         } else{
           this.loginResultMessage = result.errorMessage;
         }
       }
     );
   }
+
 
 }

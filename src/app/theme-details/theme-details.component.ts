@@ -13,7 +13,7 @@ import { catchError, map, tap } from 'rxjs/operators';
   templateUrl: './theme-details.component.html',
   styleUrls: ['./theme-details.component.css']
 })
-export class ThemeDetailsComponent implements OnInit {
+export class ThemeDetailsComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<object> = new Subject();
   themeID:number;
   errorMessage:string = " ";
