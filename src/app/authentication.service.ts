@@ -11,22 +11,23 @@ const  tokenurl = "/Token";
 @Injectable({
     providedIn: 'root'
   })
-export class AuthenticationService  implements OnInit{
+export class AuthenticationService  {
 
     authentcationStateChange:Subject<AuthenticationState> = new Subject();
     currentState:AuthenticationState={isAuthenticated:false, user:null}
 
     rememberMe:boolean=false;
 
-    constructor(private http: HttpClient) {}
-
-    ngOnInit(){
+    constructor(private http: HttpClient) {
         if(localStorage.getItem(localStorageEntryTokenName) != null){
             this.rememberMe = true;
         } else {
             this.rememberMe = false;
         }
+        this.updateState();
     }
+
+
 
     getStorage():Storage{
         if(this.rememberMe){

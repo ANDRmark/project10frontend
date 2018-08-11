@@ -8,6 +8,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { ThemesComponent } from './themes/themes.component';
 import { ThemeDetailsComponent } from './theme-details/theme-details.component';
+import { AddNewMessageComponent } from './add-new-message/add-new-message.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { ThemeDetailsComponent } from './theme-details/theme-details.component';
     LoginComponent,
     RegistrationComponent,
     ThemesComponent,
-    ThemeDetailsComponent
+    ThemeDetailsComponent,
+    AddNewMessageComponent
   ],
   imports: [
     BrowserModule,

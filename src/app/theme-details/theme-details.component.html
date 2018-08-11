@@ -20,4 +20,7 @@
           </div>
       </div>
   </div>
+  <div *ngIf="authenticationService.isAuthenticated()">
+    <app-add-new-message [themeId]="themeID"></app-add-new-message>
+  </div>
 </div>

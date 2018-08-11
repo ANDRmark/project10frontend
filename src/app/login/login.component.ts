@@ -39,9 +39,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
 
-  SendLoginAndPassword(username:string, password:string){
+  SendLoginAndPassword(username:string, password:string, rememberMe:boolean){
     this.loginResultMessage = "  ";
-    this.authenticationService.SendLoginAndPasswordAndStoreToken(username,password)
+    this.authenticationService.SendLoginAndPasswordAndStoreToken(username,password,rememberMe)
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(
       result => {
@@ -51,6 +51,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         } else{
           this.loginResultMessage = result.errorMessage;
         }
+      },
+      (error:any) => {
+        this.loginResultMessage = "Something went wromg";
       }
     );
   }

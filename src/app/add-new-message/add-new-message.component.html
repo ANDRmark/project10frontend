@@ -1,0 +1,8 @@
+<div>
+  Create new Message:
+  <div>
+    <textarea #NewMessageTextArea name="" id="" cols="30" rows="5" placeholder="Enter your message here"></textarea> <br>
+    <button type="button" (click)="CreateNewMessage(NewMessageTextArea.value)">Send</button>
+  </div>
+  <div>{{errorMessage}}</div>
+</div>
