@@ -4,6 +4,9 @@ import { Observable, Subject, of } from 'rxjs';
 import { ThemeService } from '../theme.service';
 import { Message, Theme } from '../models';
 import { catchError, map, tap } from 'rxjs/operators';
+import { AuthenticationService } from '../authentication.service';
+import { ActivatedRoute } from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
 
 
 @Component({
@@ -16,12 +19,16 @@ export class ThemesComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<object> = new Subject();
   errorMessage: string = " ";
   themes: Theme[];
+  currentUrl:string = null;
 
-  constructor(private themeService: ThemeService) { }
+  constructor(
+    private themeService: ThemeService,
+    public authenticationService: AuthenticationService,
+    private route:ActivatedRoute) { }
 
   ngOnInit() {
+    this.currentUrl=this.route.snapshot['_routerState'].url;
     this.getThemes();
-    console.log("getThemes");
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -47,7 +54,7 @@ export class ThemesComponent implements OnInit, OnDestroy {
         }
       },
         (error: any) => {
-          this.errorMessage = error;
+          this.errorMessage = "Error occured while getting information about themes.";
         }
       );
   }

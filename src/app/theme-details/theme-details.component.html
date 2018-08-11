@@ -21,6 +21,6 @@
       </div>
   </div>
   <div *ngIf="authenticationService.isAuthenticated()">
-    <app-add-new-message [themeId]="themeID"></app-add-new-message>
+      <a routerLink="{{currentUrl}}/newMessage">Create new Message</a>
   </div>
 </div>

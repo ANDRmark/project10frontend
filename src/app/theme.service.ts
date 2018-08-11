@@ -34,11 +34,25 @@ export class ThemeService {
     );
   }
 
-  handleError(methodname:string, messageForSubscriber:string="An error occured, try again later"){
+  sendNewTheme(themeName:string){
+    var url = "api/Theme/InsertNewTheme";
+    var headers = new HttpHeaders();
+    if(this.authenticationService.isAuthenticated()){
+      var t = this.authenticationService.retrieveStoredAccessToken();
+      headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
+    }
+    headers = headers.append("Content-Type", "application/json");
+    var data = {ThemeName:themeName}
+    return this.http.post(url, data, {headers:headers}).pipe(
+      catchError(this.handleError("sendNewTheme"))
+    );
+  }
+
+  handleError(methodname:string){
     return (e:any) =>{
       console.log("Got error when try to execute operation: "+ methodname);
       console.log(e);
-      return throwError(messageForSubscriber);
+      return throwError(e);
     }
   }
 }

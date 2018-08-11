@@ -4,4 +4,7 @@
   <ul>
     <li *ngFor="let theme of themes"> <a routerLink="/theme/{{theme.ThemeId}}">{{theme.ThemeName}}</a>   (Create Date: {{theme.CreateDate.toISOString().split("T")[0] + " " +theme.CreateDate.toLocaleTimeString().split(' ')[0]}})</li>
   </ul>
+  <div *ngIf="authenticationService.isAuthenticated()">
+      <a routerLink="{{currentUrl}}/newTheme">Create new Theme</a>
+  </div>
 </div>

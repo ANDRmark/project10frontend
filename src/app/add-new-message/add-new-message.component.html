@@ -1,8 +1,14 @@
 <div>
-  Create new Message:
-  <div>
-    <textarea #NewMessageTextArea name="" id="" cols="30" rows="5" placeholder="Enter your message here"></textarea> <br>
-    <button type="button" (click)="CreateNewMessage(NewMessageTextArea.value)">Send</button>
+  <span>Here you can create new message</span>
+  <div *ngIf="theme">
+      <div #NewMessageHeader>
+          <span> Creating new Message for theme: {{theme.ThemeName}}</span><br>
+          <!-- <span>{{theme.CreateDate.toISOString().split("T")[0] + " " +theme.CreateDate.toLocaleTimeString().split(' ')[0]}}</span><br> -->
+    </div>
+    <div>
+      <textarea #NewMessageTextArea name="" id="" cols="30" rows="5" placeholder="Enter your message body here"></textarea> <br><br>
+      <button type="button" (click)="CreateNewMessage(NewMessageTextArea.value)">Send</button> &nbsp; <button type="button" (click)="goBack()">Go back</button>
+    </div>
   </div>
   <div>{{errorMessage}}</div>
 </div>

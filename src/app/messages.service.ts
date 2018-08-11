@@ -38,11 +38,11 @@ export class MessagesService {
     );
   }
 
-  handleError(methodname:string, messageForSubscriber:string="An error occured, try again later"){
+  handleError(methodname:string){
     return (e:any) =>{
       console.log("Got error when try to execute operation: "+ methodname);
       console.log(e);
-      return throwError(messageForSubscriber);
+      return throwError(e);
     }
   }
 }

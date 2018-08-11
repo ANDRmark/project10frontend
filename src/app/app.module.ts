@@ -9,6 +9,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { ThemesComponent } from './themes/themes.component';
 import { ThemeDetailsComponent } from './theme-details/theme-details.component';
 import { AddNewMessageComponent } from './add-new-message/add-new-message.component';
+import { AddNewThemeComponent } from './add-new-theme/add-new-theme.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { AddNewMessageComponent } from './add-new-message/add-new-message.compon
     RegistrationComponent,
     ThemesComponent,
     ThemeDetailsComponent,
-    AddNewMessageComponent
+    AddNewMessageComponent,
+    AddNewThemeComponent
   ],
   imports: [
     BrowserModule,

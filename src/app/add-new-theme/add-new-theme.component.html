@@ -1,0 +1,13 @@
+<div>
+    <span>Here you can create new theme</span>
+    <div >
+        <div #NewThemeHeader>
+            <span> Creating new theme</span><br>
+      </div>
+      <div>
+        <input type="text" #NewThemeTextBox  placeholder="Enter name of new theme"> <br><br>
+        <button type="button" (click)="CreateNewTheme(NewThemeTextBox.value)">Send</button> &nbsp; <button type="button" (click)="goBack()">Go back</button>
+      </div>
+    </div>
+    <div>{{errorMessage}}</div>
+  </div>

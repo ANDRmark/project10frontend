@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { ThemeService } from '../theme.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, Subject, of } from 'rxjs';
 import { MessagesService } from '../messages.service';
@@ -20,6 +20,7 @@ export class ThemeDetailsComponent implements OnInit, OnDestroy {
   errorMessage: string = " ";
   theme: Theme = null;
   messgages: Message[] = null;
+  currentUrl:string="";
 
 
   constructor(
@@ -31,7 +32,8 @@ export class ThemeDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.themeID = +this.route.snapshot.paramMap.get('id');
+    this.themeID = +this.route.snapshot.paramMap.get('themeId');
+    this.currentUrl=this.route.snapshot['_routerState'].url;
     this.getTheme();
     this.getMessages();
   }
@@ -58,7 +60,6 @@ export class ThemeDetailsComponent implements OnInit, OnDestroy {
   }
 
   getMessages() {
-    this.themeID = +this.route.snapshot.paramMap.get('id');
     this.messageService.getMessagesByThemeId(this.themeID)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
