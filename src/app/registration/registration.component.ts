@@ -17,9 +17,9 @@ export class RegistrationComponent implements OnInit {
   ngOnInit() {
   }
 
-  SendRegistrationdata(email:string, password:string, passwordconfirm:string){
+  SendRegistrationdata(username:string,email:string, password:string, passwordconfirm:string){
     var url = "/api/Account/Register";
-    var requestbody = {Email:email,Password:password,ConfirmPassword:passwordconfirm};
+    var requestbody = {UserName:username,Email:email,Password:password,ConfirmPassword:passwordconfirm};
     this.registrationErrorMessages = null;
     this.registrationResultMessage=" ";
     this.http.post<any>(url, requestbody, { headers: {"Content-Type": "application/json"}}).pipe( 

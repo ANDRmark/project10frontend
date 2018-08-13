@@ -1,6 +1,7 @@
 <div>
   Create new account: <br>
-  <label> Email: <input #usernameInput type="email"> </label> <br>
+  <label> Name: <input #usernameInput type="email"> </label> <br>
+  <label> Email: <input #useremailInput type="email"> </label> <br>
   <label> Password: <input #passwordInput type="password"> </label> <br>
   <label> Repeat Password: <input #passwordConfirmInput type="password"> </label> <br>
   <div #registrationResultMessageContainer>{{registrationResultMessage}} <br></div>
@@ -15,5 +16,5 @@
       </li>
     </ul>
     </div>
-  <input type="button" value="Create Account" (click)="SendRegistrationdata(usernameInput.value,passwordInput.value,passwordConfirmInput.value)"> <br>
+  <input type="button" value="Create Account" (click)="SendRegistrationdata(usernameInput.value,useremailInput.value,passwordInput.value,passwordConfirmInput.value)"> <br>
 </div>
