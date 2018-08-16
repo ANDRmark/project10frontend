@@ -2,7 +2,7 @@
     <span>Here you can create new theme</span>
     <div >
         <div #NewThemeHeader>
-            <span> Creating new theme</span><br>
+            <span> Creating new theme in section </span> <span *ngIf="section">"{{section.SectionName}}"</span> <br>
       </div>
       <div>
         <input type="text" #NewThemeTextBox  placeholder="Enter name of new theme"> <br><br>

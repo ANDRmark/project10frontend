@@ -1,7 +1,8 @@
 <div>
     <div>{{ errorMessage }} <br></div>
   <div #ThemeDetailsHeader *ngIf="theme">
-        <span>Theme: {{theme.ThemeName}}</span><br>
+        <span *ngIf="section">Section: <a routerLink="/section/{{sectionId}}"> "{{section.SectionName}}"</a> </span><br>
+        <span>Theme: "{{theme.ThemeName}}"</span><br>
         <!-- <span>{{theme.CreateDate.toISOString().split("T")[0] + " " +theme.CreateDate.toLocaleTimeString().split(' ')[0]}}</span><br> -->
   </div>
   <div *ngIf="messgages">

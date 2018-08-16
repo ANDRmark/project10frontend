@@ -1,0 +1,13 @@
+<div>
+    <span>Here you can create new section</span>
+    <div >
+        <div #NewThemeHeader>
+            <span> Creating new section</span><br>
+      </div>
+      <div>
+        <input type="text" #NewSectionTextBox  placeholder="Enter name of new section"> <br><br>
+        <button type="button" (click)="CreateNewSection(NewSectionTextBox.value)">Send</button> &nbsp; <button type="button" (click)="goBack()">Go back</button>
+      </div>
+    </div>
+    <div>{{errorMessage}}</div>
+  </div>

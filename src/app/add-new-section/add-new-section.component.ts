@@ -12,57 +12,36 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { SectionsService } from '../sections.service';
 
 @Component({
-  selector: 'app-add-new-theme',
-  templateUrl: './add-new-theme.component.html',
-  styleUrls: ['./add-new-theme.component.css']
+  selector: 'app-add-new-section',
+  templateUrl: './add-new-section.component.html',
+  styleUrls: ['./add-new-section.component.css']
 })
-export class AddNewThemeComponent implements OnInit {
+export class AddNewSectionComponent implements OnInit, OnDestroy{
 
-  constructor(
-    private themeService: ThemeService,
-    public authenticationService: AuthenticationService,
-    private sectionService:SectionsService,
+  constructor(private sectionService:SectionsService,
     private location: Location,
-    private router: Router,
-    private route:ActivatedRoute
-  ) { }
+    private router: Router,) { }
 
   errorMessage: string = " ";
   private ngUnsubscribe: Subject<object> = new Subject();
-  sectionId:number;
-  section:Section=null;
 
   ngOnInit() {
-    this.sectionId = +this.route.snapshot.paramMap.get('sectionId');
-    this.getSection();
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-  getSection() {
-    this.sectionService.getSection(this.sectionId).pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(data => {
-        if (data != null && data.hasOwnProperty("section")) {
-          this.section = {
-            SectionName: data.section.Title,
-            SectionId: data.section.Id,
-            CreateDate: new Date(data.section.CreateDate)
-          };
-        }
-      },
-        (error: any) => {
-          this.errorMessage += " Error occured while getting information abouth section. ";
-        });
+  goBack() {
+    this.router.navigate(['sections']);
   }
 
-  CreateNewTheme(themeName: string) {
+  CreateNewSection(sectionName: string) {
     this.errorMessage = "";
-    this.themeService.sendNewTheme(this.sectionId,themeName)
+    this.sectionService.sendNewSection(sectionName)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         result => {
-          this.errorMessage = " new Theme sent ";
+          this.errorMessage = " new Section sent ";
           this.goBack();
         },
         (error: any) => {
@@ -80,15 +59,10 @@ export class AddNewThemeComponent implements OnInit {
             }
           }
           else {
-            this.errorMessage = " Error occured while sending your theme ";
+            this.errorMessage = " Error occured while sending your section ";
           }
         });
   }
-
-  goBack() {
-    this.router.navigate(['section/'+this.sectionId]);
-  }
-
   generateErrorMessagesArray(obj) {
     var errormessages = Array();
     Object.keys(obj).forEach(key => {

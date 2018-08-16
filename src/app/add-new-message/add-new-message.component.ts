@@ -45,7 +45,8 @@ export class AddNewMessageComponent implements OnInit, OnDestroy {
           this.theme = {
             ThemeName: data.theme.Title,
             ThemeId: data.theme.Id,
-            CreateDate: new Date(data.theme.CreateDate)
+            CreateDate: new Date(data.theme.CreateDate),
+            SectionId: data.theme.SectionId
           };
         }
       },

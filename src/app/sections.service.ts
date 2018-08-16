@@ -7,43 +7,44 @@ import { AuthenticationService } from './authentication.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ThemeService {
+export class SectionsService {
 
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
 
-  GetThemesBySection(id: number): Observable<any> {
-    var url = "api/Theme/GetThemesBySection/"+id;
+  
+  getSections(): Observable<any> {
+    var url = "api/Section/GetSections";
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { "headers": headers }).pipe(
-      catchError(this.handleError("getThemes"))
+      catchError(this.handleError("getSections"))
     );
   }
 
-  getTheme(id: number) {
-    var url = "api/Theme/GetTheme/" + id;
+  getSection(id: number) {
+    var url = "api/Section/GetSection/" + id;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { "headers": headers }).pipe(
-      catchError(this.handleError("getTheme"))
+      catchError(this.handleError("getSection"))
     );
   }
 
-  sendNewTheme(sectionId:number,themeName:string){
-    var url = "api/Theme/InsertNewTheme";
+  sendNewSection(sectionName:string){
+    var url = "api/Section/InsertNewSection";
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
       var t = this.authenticationService.retrieveStoredAccessToken();
       headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
     }
     headers = headers.append("Content-Type", "application/json");
-    var data = {ThemeName:themeName, SectionId:sectionId}
+    var data = {SectionName:sectionName}
     return this.http.post(url, data, {headers:headers}).pipe(
-      catchError(this.handleError("sendNewTheme"))
+      catchError(this.handleError("sendNewSection"))
     );
   }
 

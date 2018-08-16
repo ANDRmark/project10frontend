@@ -1,0 +1,31 @@
+<div>
+  Here you can controle users. Delete users, assign roles etc...
+  <div>
+    Search criteria:  <br>
+    <label >Id: <input type="text" placeholder="Exact ID of user"></label>
+    <label >UserName: <input type="text" placeholder="Part of UserName of user"></label>
+    <button type="button" (click)="SearchClick()">Search</button>
+  </div>
+  <div>
+    {{errorMessage}}
+  </div>
+  <div>
+    Found users:
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>UserName</th>
+        <th>Email</th>
+        <th>Roles</th>
+        <th>Actions</th>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+</div>

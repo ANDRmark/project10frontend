@@ -9,4 +9,11 @@ export class Message{
     public ThemeName:string;
     public ThemeId:number;
     public CreateDate:Date;
+    public SectionId:number;
+  }
+
+  export class Section{
+    public SectionName:string;
+    public SectionId:number;
+    public CreateDate:Date;
   }

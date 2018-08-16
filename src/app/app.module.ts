@@ -10,6 +10,9 @@ import { ThemesComponent } from './themes/themes.component';
 import { ThemeDetailsComponent } from './theme-details/theme-details.component';
 import { AddNewMessageComponent } from './add-new-message/add-new-message.component';
 import { AddNewThemeComponent } from './add-new-theme/add-new-theme.component';
+import { AdmindashboardComponent } from './admindashboard/admindashboard.component';
+import { SectionsComponent } from './sections/sections.component';
+import { AddNewSectionComponent } from './add-new-section/add-new-section.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,10 @@ import { AddNewThemeComponent } from './add-new-theme/add-new-theme.component';
     ThemesComponent,
     ThemeDetailsComponent,
     AddNewMessageComponent,
-    AddNewThemeComponent
+    AddNewThemeComponent,
+    AdmindashboardComponent,
+    SectionsComponent,
+    AddNewSectionComponent
   ],
   imports: [
     BrowserModule,

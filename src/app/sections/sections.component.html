@@ -1,0 +1,12 @@
+<div>
+  Sections:
+  <div>{{errorMessage}} <br></div>
+  <ul>
+    <li *ngFor="let section of sections"> <a routerLink="/section/{{section.SectionId}}">"{{section.SectionName}}"</a>
+      <!-- (Create Date: {{section.CreateDate.toISOString().split("T")[0] + " " +section.CreateDate.toLocaleTimeString().split(' ')[0]}}) -->
+    </li>
+  </ul>
+  <div *ngIf="authenticationService.isAuthenticated()">
+      <a routerLink="{{currentUrl}}/newSection">Create new Section</a>
+  </div>
+</div>
