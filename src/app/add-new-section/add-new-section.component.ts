@@ -59,7 +59,12 @@ export class AddNewSectionComponent implements OnInit, OnDestroy{
             }
           }
           else {
-            this.errorMessage = " Error occured while sending your section ";
+            if (error.error.hasOwnProperty("Message")) {
+              this.errorMessage = error.error.Message;
+            }
+            else {
+              this.errorMessage = "Error occured while sending new section";
+            }
           }
         });
   }

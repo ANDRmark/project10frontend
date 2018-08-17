@@ -80,7 +80,12 @@ export class AddNewThemeComponent implements OnInit {
             }
           }
           else {
-            this.errorMessage = " Error occured while sending your theme ";
+            if (error.error.hasOwnProperty("Message")) {
+              this.errorMessage = error.error.Message;
+            }
+            else {
+              this.errorMessage = "Error occured while sending new theme";
+            }
           }
         });
   }

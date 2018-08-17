@@ -56,6 +56,7 @@ export class AddNewMessageComponent implements OnInit, OnDestroy {
   }
 
   CreateNewMessage(messageBody:string){
+    this.clearErrors();
     this.messageService.sendNewMessage(this.themeId, messageBody)
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(
@@ -77,15 +78,24 @@ export class AddNewMessageComponent implements OnInit, OnDestroy {
               this.errorMessage += e + ";  ";
             }
           }
-        }
+        } 
         else {
-          this.errorMessage = " Error occured while sending your Message ";
+          if (error.error.hasOwnProperty("Message")) {
+            this.errorMessage = error.error.Message;
+          }
+          else {
+            this.errorMessage = "Error occured while sending new message";
+          }
         }
       });
   }
 
   goBack(){
     this.location.back();
+  }
+
+  clearErrors(){
+    this.errorMessage = " ";
   }
 
   generateErrorMessagesArray(obj) {
