@@ -2,16 +2,26 @@
   Here you can controle users. Delete users, assign roles etc...
   <div>
     Search criteria:  <br>
-    <label >Id: <input type="text" placeholder="Exact ID of user"></label>
-    <label >UserName: <input type="text" placeholder="Part of UserName of user"></label>
-    <button type="button" (click)="SearchClick()">Search</button>
+    <label >Id: <input type="text" #IdInput placeholder="Exact ID of user"></label><button type="button" (click)="SearchByIdClick()">Search</button> <br>
+    <label >UserName: <input type="text" #UserNameInput placeholder="Part of UserName of user"></label><button type="button" (click)="SearchByNameClick()">Search</button> <br>  
   </div>
   <div>
     {{errorMessage}}
   </div>
+  <div #Errors *ngIf="errorMessages">
+      Error list:
+      <ul>
+        <li *ngFor="let errorlistnamevaluepair of generateErrorMessagesArray(errorMessages)"> 
+          {{errorlistnamevaluepair.name}}
+          <ul>
+            <li *ngFor="let singleerror of errorlistnamevaluepair.value">{{singleerror}}</li>
+          </ul>
+        </li>
+      </ul>
+      </div>
   <div>
     Found users:
-    <table>
+    <table border="1">
       <tr>
         <th>ID</th>
         <th>UserName</th>
@@ -19,13 +29,21 @@
         <th>Roles</th>
         <th>Actions</th>
       </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+      <ng-container *ngIf="users && users.length > 0;then userspresent else nousers">here is ignored</ng-container>    
+<ng-template #userspresent>
+  <tr *ngFor="let user of users">
+  <td>{{user.Id}}</td>
+  <td>{{user.UserName}}</td>
+  <td>{{user.Email}}</td>
+  <td>  <ng-container *ngIf="user.Roles"><ng-container *ngFor="let role of user.Roles">{{role.Name}}; </ng-container></ng-container></td>
+  <td></td>
+</tr>
+</ng-template>
+<ng-template #nousers>
+  <tr>
+  <td colspan="5"> No users</td>
+</tr>
+</ng-template>
     </table>
   </div>
 </div>

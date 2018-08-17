@@ -17,3 +17,15 @@ export class Message{
     public SectionId:number;
     public CreateDate:Date;
   }
+
+  export class User{
+    public Id:number;
+    public UserName:string;
+    public Email:string;
+    public Roles:Role[];
+  }
+
+  export class Role{
+    public Id:number;
+    public Name:string;
+  }
