@@ -17,7 +17,7 @@ export class UsersService {
     params = params.set('userid', userid.toString());
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
-      headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { headers: headers, params:params }).pipe(
       catchError(this.handleError("getUserById"))
@@ -30,16 +30,51 @@ export class UsersService {
     params = params.set('username', username);
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
-      headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { headers: headers, params:params }).pipe(
       catchError(this.handleError("getUsersByName"))
     );
   }
 
-  deleteUser(id:number){
-
+  getAllUsers(){
+    var url = "api/User/GetAllUsers";
+    var headers = new HttpHeaders();
+    if (this.authenticationService.isAuthenticated()) {
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+    }
+    return this.http.get<any>(url, { headers: headers }).pipe(
+      catchError(this.handleError("getUsersByName"))
+    );
   }
+
+  setRoles(UserId:number,Roles){
+    var url = "api/User/SetRoles";
+    var requestbody = {UserId:UserId, Roles:Roles};
+    var headers = new HttpHeaders();
+    if (this.authenticationService.isAuthenticated()) {
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+    }
+    headers = headers.append("Content-Type", "application/json");
+    return this.http.post<any>(url, requestbody, { headers: headers }).pipe(
+      catchError(this.handleError("setRoles"))
+    );
+  }
+
+  deleteUser(UserId:number){
+    var url = "api/User/DeleteUser";
+    var requestbody = {UserId:UserId};
+    var headers = new HttpHeaders();
+    if (this.authenticationService.isAuthenticated()) {
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+    }
+    headers = headers.append("Content-Type", "application/json");
+    return this.http.post<any>(url, requestbody, { headers: headers }).pipe(
+      catchError(this.handleError("deleteUser"))
+    );
+  }
+
+
 
 
   handleError(methodname:string){

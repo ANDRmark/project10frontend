@@ -16,15 +16,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class AdmindashboardComponent implements OnInit, OnDestroy {
 
-  constructor(private userService: UsersService) { }
+  constructor(
+    private userService: UsersService,
+    private route:ActivatedRoute) { }
   private ngUnsubscribe: Subject<object> = new Subject();
   users: User[] = [];
   errorMessage = " ";
   errorMessages: any;
+  currentUrl:string;
   @ViewChild('UserNameInput') UserNameInput: ElementRef;
   @ViewChild('IdInput') IdInput: ElementRef;
 
   ngOnInit() {
+    this.currentUrl=this.route.snapshot['_routerState'].url;
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -38,19 +42,7 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
         if (data != null && data.hasOwnProperty("users")) {
-          this.users = new Array();
-          for (let user of data.users) {
-            var roles: Role[] = [];
-            for (let role of user.Roles) {
-              roles.push({ Id: role.Id, Name: role.Name });
-            }
-            this.users.push({
-              UserName: user.UserName,
-              Email: user.Email,
-              Id: user.Id,
-              Roles: roles
-            });
-          }
+          this.users = data.users;
         }
       },
         (e: any) => {
@@ -77,19 +69,33 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
         if (data != null && data.hasOwnProperty("users")) {
-          this.users = new Array();
-          for (let user of data.users) {
-            var roles: Role[] = [];
-            for (let role of user.Roles) {
-              roles.push({ Id: role.Id, Name: role.Name });
-            }
-            this.users.push({
-              UserName: user.UserName,
-              Email: user.Email,
-              Id: user.Id,
-              Roles: roles
-            });
+          this.users = data.users;
+        }
+      },
+        (e: any) => {
+          if (e.error.hasOwnProperty("ModelState")) {
+            this.errorMessage = "Invalid argument for Id; ";
           }
+          else {
+            if (e.error.hasOwnProperty("Message")) {
+              this.errorMessage = e.error.Message;
+            }
+            else {
+              this.errorMessage = "Error occured while getting information about users.";
+            }
+          }
+        }
+      );
+  }
+
+  getAllUsers() {
+    this.users = [];
+    this.clearErrors();
+    this.userService.getAllUsers()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        if (data != null && data.hasOwnProperty("users")) {
+          this.users = data.users;
         }
       },
         (e: any) => {
@@ -114,6 +120,9 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
   SearchByIdClick() {
     var userid: number = this.IdInput.nativeElement.value;
     this.getUsersById(userid);
+  }
+  GetAllClick(){
+    this.getAllUsers();
   }
 
   generateErrorMessagesArray(obj) {

@@ -16,7 +16,7 @@ export class SectionsService {
     var url = "api/Section/GetSections";
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
-      headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { "headers": headers }).pipe(
       catchError(this.handleError("getSections"))
@@ -27,7 +27,7 @@ export class SectionsService {
     var url = "api/Section/GetSection/" + id;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
-      headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { "headers": headers }).pipe(
       catchError(this.handleError("getSection"))

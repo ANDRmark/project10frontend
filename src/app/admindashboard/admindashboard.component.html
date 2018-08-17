@@ -1,7 +1,8 @@
 <div>
-  Here you can controle users. Delete users, assign roles etc...
+  Here you can see information about users.
   <div>
     Search criteria:  <br>
+    <button type="button" (click)="GetAllClick()">Get all users</button> <br>
     <label >Id: <input type="text" #IdInput placeholder="Exact ID of user"></label><button type="button" (click)="SearchByIdClick()">Search</button> <br>
     <label >UserName: <input type="text" #UserNameInput placeholder="Part of UserName of user"></label><button type="button" (click)="SearchByNameClick()">Search</button> <br>  
   </div>
@@ -27,7 +28,7 @@
         <th>UserName</th>
         <th>Email</th>
         <th>Roles</th>
-        <th>Actions</th>
+        <th></th>
       </tr>
       <ng-container *ngIf="users && users.length > 0;then userspresent else nousers">here is ignored</ng-container>    
 <ng-template #userspresent>
@@ -36,7 +37,9 @@
   <td>{{user.UserName}}</td>
   <td>{{user.Email}}</td>
   <td>  <ng-container *ngIf="user.Roles"><ng-container *ngFor="let role of user.Roles">{{role.Name}}; </ng-container></ng-container></td>
-  <td></td>
+  <td>
+    <a routerLink="{{currentUrl}}/actionsonuser/{{user.Id}}">Manage</a>
+  </td>
 </tr>
 </ng-template>
 <ng-template #nousers>

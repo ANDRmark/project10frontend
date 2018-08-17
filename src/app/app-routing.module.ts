@@ -9,6 +9,7 @@ import { AddNewThemeComponent } from './add-new-theme/add-new-theme.component';
 import { AdmindashboardComponent } from './admindashboard/admindashboard.component';
 import { SectionsComponent } from './sections/sections.component';
 import { AddNewSectionComponent } from './add-new-section/add-new-section.component';
+import { ActionsOnUserComponent } from './actions-on-user/actions-on-user.component';
 
 
 
@@ -17,7 +18,7 @@ import { AddNewSectionComponent } from './add-new-section/add-new-section.compon
 const routes: Routes = [
   { path: '', pathMatch:'full', redirectTo:"sections"},
   { path : "sections", component: SectionsComponent},
-  { path : "sections/newSection", component: AddNewSectionComponent},
+  { path : "sections/newSection", component: AddNewSectionComponent}, 
   { path : 'section/:sectionId', component: ThemesComponent },
   { path : 'section/:sectionId/newTheme', component: AddNewThemeComponent },
   { path : 'section/:sectionId/theme/:themeId', component: ThemeDetailsComponent},
@@ -25,7 +26,8 @@ const routes: Routes = [
   { path : 'logout', component: LoginComponent, data:{logout:true}},
   { path : 'login', component: LoginComponent},
   { path : 'register', component: RegistrationComponent},
-  { path : "admindashboard", component: AdmindashboardComponent}
+  { path : "admindashboard", component: AdmindashboardComponent},
+  { path : "admindashboard/actionsonuser/:userId", component: ActionsOnUserComponent}
 ];
 
 @NgModule({

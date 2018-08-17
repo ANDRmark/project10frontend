@@ -15,7 +15,7 @@ export class ThemeService {
     var url = "api/Theme/GetThemesBySection/"+id;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
-      headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { "headers": headers }).pipe(
       catchError(this.handleError("getThemes"))
@@ -26,7 +26,7 @@ export class ThemeService {
     var url = "api/Theme/GetTheme/" + id;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
-      headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { "headers": headers }).pipe(
       catchError(this.handleError("getTheme"))

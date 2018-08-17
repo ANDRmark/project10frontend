@@ -13,6 +13,7 @@ import { AddNewThemeComponent } from './add-new-theme/add-new-theme.component';
 import { AdmindashboardComponent } from './admindashboard/admindashboard.component';
 import { SectionsComponent } from './sections/sections.component';
 import { AddNewSectionComponent } from './add-new-section/add-new-section.component';
+import { ActionsOnUserComponent } from './actions-on-user/actions-on-user.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AddNewSectionComponent } from './add-new-section/add-new-section.compon
     AddNewThemeComponent,
     AdmindashboardComponent,
     SectionsComponent,
-    AddNewSectionComponent
+    AddNewSectionComponent,
+    ActionsOnUserComponent
   ],
   imports: [
     BrowserModule,

@@ -16,7 +16,6 @@ export class MessagesService {
     var url = "/api/Message/GetMessagesByThemeId/"+id;
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
-      var t = this.authenticationService.retrieveStoredAccessToken();
       headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, {"headers": headers}).pipe(
@@ -28,7 +27,6 @@ export class MessagesService {
     var url = "api/Message/InsertNewMessage";
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
-      var t = this.authenticationService.retrieveStoredAccessToken();
       headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
     }
     headers = headers.append("Content-Type", "application/json");

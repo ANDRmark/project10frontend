@@ -1,0 +1,64 @@
+<div>
+  Here you can delete user, assign roles etc... <br>
+  <div *ngIf="user">
+    <table>
+      <tr>
+        <th colspan="2">Current information about user: </th>
+      </tr>
+      <tr>
+        <td>Id: </td>
+        <td>{{user.Id}}</td>
+      </tr>
+
+      <tr>
+        <td>UserName: </td>
+        <td>{{user.UserName}}</td>
+      </tr>
+      <tr>
+        <td>Email:</td>
+        <td>{{user.Email}}</td>
+      </tr>
+      <tr>
+          <td>Roles:</td>
+          <td><ng-container *ngIf="user.Roles"><ng-container *ngFor="let role of user.Roles">{{role.Name}}; </ng-container></ng-container></td>
+        </tr>
+    </table> 
+    <br>
+    <!-- Current information about user: <br>
+    Id: {{user.Id}}<br>
+    UserName: {{user.UserName}}<br>
+    Email: {{user.Email}}<br>
+    Roles: <ng-container *ngIf="user.Roles"><ng-container *ngFor="let role of user.Roles">{{role.Name}}; </ng-container></ng-container><br>
+    <br> -->
+    <div>
+      Actions: <br>
+      <div>
+        Assigning roles: <br>
+        <label><input type="checkbox" #RoleUserCheckbox [checked]="isUserInRole('User')">User</label> <br>
+        <label><input type="checkbox" #RoleModeratorCheckbox [checked]="isUserInRole('Moderator')">Moderator</label>  <br>
+        <label><input type="checkbox" #RoleAdminCheckbox [checked]="isUserInRole('Admin')">Admin</label>  <br>
+        <button type="button" (click)="applyRoles()">Apply roles</button> <br>
+        <br>
+      </div>
+      <div>
+        Deleting user: <br>
+        Be careful when deleting any administrator account or your own account!!! <br>
+        <button type="button" (click)="deleteUser()">Delete user</button><br>
+      </div>
+    </div>
+  </div>
+  <div>
+    {{errorMessage}}
+  </div>
+  <div #Errors *ngIf="errorMessages">
+    Error list:
+    <ul>
+      <li *ngFor="let errorlistnamevaluepair of generateErrorMessagesArray(errorMessages)">
+        {{errorlistnamevaluepair.name}}
+        <ul>
+          <li *ngFor="let singleerror of errorlistnamevaluepair.value">{{singleerror}}</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
