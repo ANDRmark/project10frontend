@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
@@ -12,27 +12,42 @@ export class SectionsService {
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
 
   
-  getSections(): Observable<any> {
+  getAllSections(): Observable<any> {
     var url = "api/Section/GetSections";
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { "headers": headers }).pipe(
-      catchError(this.handleError("getSections"))
+      catchError(this.handleError("getAllSections"))
     );
   }
-
-  getSection(id: number) {
-    var url = "api/Section/GetSection/" + id;
+  getSectionsByNamePart(sectionName:string){
+    var url = "api/Section/GetSectionsByNamePart";
+    var params = new HttpParams();
+    params = params.set('sectionName', sectionName);
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
-    return this.http.get<any>(url, { "headers": headers }).pipe(
+    return this.http.get<any>(url, { headers: headers, params:params }).pipe(
+      catchError(this.handleError("getSectionsByNamePart"))
+    );
+  }
+
+  getSection(id: number) {
+    var url = "api/Section/GetSection";
+    var params = new HttpParams();
+    params = params.set('sectionId', id.toString());
+    var headers = new HttpHeaders();
+    if (this.authenticationService.isAuthenticated()) {
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+    }
+    return this.http.get<any>(url, { "headers": headers, params:params }).pipe(
       catchError(this.handleError("getSection"))
     );
   }
+
 
   sendNewSection(sectionName:string){
     var url = "api/Section/InsertNewSection";
@@ -45,6 +60,33 @@ export class SectionsService {
     var data = {SectionName:sectionName}
     return this.http.post(url, data, {headers:headers}).pipe(
       catchError(this.handleError("sendNewSection"))
+    );
+  }
+
+  RenameSection(sectionId:number, newSectionName:string){
+    var url = "api/Section/RenameSection";
+    var headers = new HttpHeaders();
+    if(this.authenticationService.isAuthenticated()){
+      var t = this.authenticationService.retrieveStoredAccessToken();
+      headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
+    }
+    headers = headers.append("Content-Type", "application/json");
+    var data = {SectionId:sectionId, NewSectionName:newSectionName}
+    return this.http.post(url, data, {headers:headers}).pipe(
+      catchError(this.handleError("RenameSection"))
+    );
+  }
+
+  DeleteSection(sectionId:number){
+    var url = "api/Section/DeleteSection";
+    var headers = new HttpHeaders();
+    if (this.authenticationService.isAuthenticated()) {
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+    }
+    headers = headers.append("Content-Type", "application/json");
+    var data = {SectionId:sectionId};
+    return this.http.post<any>(url, data, { headers: headers }).pipe(
+      catchError(this.handleError("DeleteSection"))
     );
   }
 

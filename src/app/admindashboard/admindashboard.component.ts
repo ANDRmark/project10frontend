@@ -20,7 +20,7 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
     private userService: UsersService,
     private route:ActivatedRoute) { }
   private ngUnsubscribe: Subject<object> = new Subject();
-  users: User[] = [];
+  users: User[] = null;
   errorMessage = " ";
   errorMessages: any;
   currentUrl:string;
@@ -36,9 +36,9 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
   }
 
   getUsersByName(username: string) {
-    this.users = [];
+    this.users = null;
     this.clearErrors();
-    this.userService.getUsersByName(username)
+    this.userService.getUsersByNamePart(username)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
         if (data != null && data.hasOwnProperty("users")) {
@@ -63,13 +63,17 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
   }
 
   getUsersById(userid: number) {
-    this.users = [];
+    this.users = null;
     this.clearErrors();
     this.userService.getUserById(userid)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
-        if (data != null && data.hasOwnProperty("users")) {
-          this.users = data.users;
+        if (data != null && data.hasOwnProperty("user")) {
+          if(data.user != null){
+            this.users = [data.user];
+          } else{
+            this.users = [];
+          }
         }
       },
         (e: any) => {
@@ -100,7 +104,7 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
       },
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
-            this.errorMessage = "Invalid argument for Id; ";
+            this.errorMessage = "Invalid request; ";
           }
           else {
             if (e.error.hasOwnProperty("Message")) {

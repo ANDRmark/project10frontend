@@ -1,0 +1,172 @@
+<div>
+  Here you can delete messages, themes, sections, move messages and themes, etc
+  <div>
+    <div>
+      {{errorMessage}}
+    </div>
+    <div #Errors *ngIf="errorMessages">
+      Error list:
+      <ul>
+        <li *ngFor="let errorlistnamevaluepair of generateErrorMessagesArray(errorMessages)">
+          {{errorlistnamevaluepair.name}}
+          <ul>
+            <li *ngFor="let singleerror of errorlistnamevaluepair.value">{{singleerror}}</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <div>
+        Select section:
+        <br>
+        <button type="button" (click)="GetAllSectionsClick()">Get all sections</button>
+        <br>
+        <label>Id:
+          <input type="text" #SectionIdInput placeholder="Exact ID of section">
+        </label>
+        <button type="button" (click)="GetSectionByIdClick()">Search by id</button>
+        <br>
+        <label>Name:
+          <input type="text" #SectionNameInput placeholder="Part of Name of section">
+        </label>
+        <button type="button" (click)="SearchSectionByNameClick()">Search by name</button>
+        <br>
+      </div>
+      <div>
+        Found Sections:
+        <table border="1">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Create Date</th>
+            <th></th>
+          </tr>
+          <ng-container *ngIf="sections && sections.length > 0;then sectionspresent else nousections">here is ignored</ng-container>
+          <ng-template #sectionspresent>
+            <tr *ngFor="let section of sections">
+              <td>{{section.Id}}</td>
+              <td>{{section.Title}}</td>
+              <td>{{DatetoString(section.CreateDate)}}</td>
+              <td>
+                <a routerLink="{{currentUrl}}/actionsonsection/{{section.Id}}">Manage</a> &nbsp;
+                <button type="button">Select</button>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template #nousections>
+            <ng-container *ngIf="sections && sections.length == 0;then sectionsnotfound else nosectionsresult"></ng-container>
+
+            <ng-template #sectionsnotfound>
+              <tr>
+                <td colspan="5"> No sections found</td>
+              </tr>
+            </ng-template>
+            <ng-template #nosectionsresult>
+                <tr>
+                  <td colspan="5"> (Empty))</td>
+                </tr>
+              </ng-template>
+          </ng-template>
+        </table>
+      </div>
+    </div>
+    <br>
+    <br>
+    <div>
+        <div>
+          Select theme:
+          <br>
+          <button type="button" (click)="GetAllThemesClick()">Get all themes</button>
+          <br>
+          <label>Id:
+            <input type="text" #ThemeIdInput placeholder="Exact ID of theme">
+          </label>
+          <button type="button" (click)="SearchThemeByIdClick()">Search</button>
+          <br>
+          <label>Name:
+            <input type="text" #ThemeNameInput placeholder="Part of Name of theme">
+          </label>
+          <button type="button" (click)="SearchThemeByNameClick()">Search</button>
+          <br>
+        </div>
+        <div>
+          Found Themes:
+          <table border="1">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Create date</th>
+              <th></th>
+            </tr>
+            <ng-container *ngIf="themes && themes.length > 0;then themespresent else nothemes">here is ignored</ng-container>
+            <ng-template #themespresent>
+              <tr *ngFor="let theme of themes">
+                <td>{{theme.Id}}</td>
+                <td>{{theme.Name}}</td>
+                <td>{{theme.Createdate}}</td>
+                <td>
+                  <a routerLink="{{currentUrl}}/actionsonuser/{{user.Id}}">Manage</a> &nbsp;
+                  <button type="button">Select</button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template #nothemes>
+              <tr>
+                <td colspan="5"> No themes</td>
+              </tr>
+            </ng-template>
+          </table>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div>
+          <div>
+            Select message:
+            <br>
+            <button type="button" (click)="GetAllMessagesClick()">Get all messages</button>
+            <br>
+            <label>Id:
+              <input type="text" #MessageIdInput placeholder="Exact ID of message">
+            </label>
+            <button type="button" (click)="SearchMessagesByIdClick()">Search by Id</button>
+            <br>
+            <label>Author Name:
+              <input type="text" #MessageAuthorInput placeholder="Part of Name of author of message">
+            </label>
+            <label>Part of Message:
+                <input type="text" #MessagePartInput placeholder="some words frome message">
+              </label>
+            <button type="button" (click)="SearchMessagesByAuthorNameAndMessageBodyClick()">Search by Author and Message Body</button>
+            <br>
+          </div>
+          <div>
+            Found Messages:
+            <table border="1">
+              <tr>
+                <th>ID</th>
+                <th>Author</th>
+                <th>Create date</th>
+                <th>Message Body</th>
+              </tr>
+              <ng-container *ngIf="messages && messages.length > 0;then messagespresent else nomessages">here is ignored</ng-container>
+              <ng-template #messagespresent>
+                <tr *ngFor="let message of messages">
+                  <td>{{message.Id}}</td>
+                  <td>{{message.Name}}</td>
+                  <td>{{message.Createdate}}</td>
+                  <td>
+                    <a routerLink="{{currentUrl}}/actionsonuser/{{user.Id}}">Manage</a> &nbsp;
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template #nomessages>
+                <tr>
+                  <td colspan="5"> No messages</td>
+                </tr>
+              </ng-template>
+            </table>
+          </div>
+        </div>
+  </div>
+</div>

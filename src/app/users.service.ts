@@ -12,7 +12,7 @@ export class UsersService {
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
 
   getUserById(userid:number){
-    var url = "api/User/GetUsesById";
+    var url = "api/User/GetUserById";
     var params = new HttpParams();
     params = params.set('userid', userid.toString());
     var headers = new HttpHeaders();
@@ -24,8 +24,8 @@ export class UsersService {
     );
   }
 
-  getUsersByName(username:string){
-    var url = "api/User/GetUsesByUserName";
+  getUsersByNamePart(username:string){
+    var url = "api/User/GetUsersByUserNamePart";
     var params = new HttpParams();
     params = params.set('username', username);
     var headers = new HttpHeaders();
@@ -33,7 +33,7 @@ export class UsersService {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     return this.http.get<any>(url, { headers: headers, params:params }).pipe(
-      catchError(this.handleError("getUsersByName"))
+      catchError(this.handleError("getUsersByNamePart"))
     );
   }
 

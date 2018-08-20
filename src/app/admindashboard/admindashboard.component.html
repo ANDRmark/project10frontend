@@ -43,9 +43,18 @@
 </tr>
 </ng-template>
 <ng-template #nousers>
-  <tr>
-  <td colspan="5"> No users</td>
-</tr>
+    <ng-container *ngIf="users && users.length == 0;then usersnotfound else nousersresult"></ng-container>
+
+    <ng-template #usersnotfound>
+      <tr>
+        <td colspan="5"> No users found</td>
+      </tr>
+    </ng-template>
+    <ng-template #nousersresult>
+        <tr>
+          <td colspan="5"> (Empty)</td>
+        </tr>
+      </ng-template>
 </ng-template>
     </table>
   </div>

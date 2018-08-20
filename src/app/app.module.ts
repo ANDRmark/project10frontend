@@ -14,6 +14,8 @@ import { AdmindashboardComponent } from './admindashboard/admindashboard.compone
 import { SectionsComponent } from './sections/sections.component';
 import { AddNewSectionComponent } from './add-new-section/add-new-section.component';
 import { ActionsOnUserComponent } from './actions-on-user/actions-on-user.component';
+import { ModeratorDashboardComponent } from './moderator-dashboard/moderator-dashboard.component';
+import { ActionsOnSectionComponent } from './actions-on-section/actions-on-section.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { ActionsOnUserComponent } from './actions-on-user/actions-on-user.compon
     AdmindashboardComponent,
     SectionsComponent,
     AddNewSectionComponent,
-    ActionsOnUserComponent
+    ActionsOnUserComponent,
+    ModeratorDashboardComponent,
+    ActionsOnSectionComponent
   ],
   imports: [
     BrowserModule,

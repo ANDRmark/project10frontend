@@ -36,7 +36,7 @@ export class SectionsComponent implements OnInit, OnDestroy{
 
   getSections() {
     this.sections = [];
-    this.sectionService.getSections()
+    this.sectionService.getAllSections()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
         if (data != null && data.hasOwnProperty("sections")) {

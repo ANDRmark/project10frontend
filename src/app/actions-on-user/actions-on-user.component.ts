@@ -34,7 +34,7 @@ export class ActionsOnUserComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userId = +this.route.snapshot.paramMap.get('userId');
-    this.getUsersById(this.userId);
+    this.getUserById(this.userId);
 
   }
   ngOnDestroy() {
@@ -46,25 +46,22 @@ export class ActionsOnUserComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  getUsersById(userid: number) {
+  getUserById(userid: number) {
     this.user = null;
     this.clearErrors();
     this.userService.getUserById(userid)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
-        if (data != null && data.hasOwnProperty("users")) {
-          if (data.users.length == 1) {
-            this.user = data.users[0];
-          } else if (data.users.length > 1) {
-            this.errorMessage = "Error, more than one user found.  ";
-          } else if (data.users.length == 0) {
+        if (data != null && data.hasOwnProperty("user") && data.user != null) {
+            this.user = data.user;
+        } else  {
             this.errorMessage = " User not found.  ";
           }
-        }
       },
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
-            this.errorMessage = "Invalid argument for Id; ";
+            this.errorMessage = "Invalid request; ";
+            this.errorMessages = e.error.ModelState;
           }
           else {
             if (e.error.hasOwnProperty("Message")) {

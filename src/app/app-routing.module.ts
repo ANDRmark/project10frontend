@@ -10,6 +10,8 @@ import { AdmindashboardComponent } from './admindashboard/admindashboard.compone
 import { SectionsComponent } from './sections/sections.component';
 import { AddNewSectionComponent } from './add-new-section/add-new-section.component';
 import { ActionsOnUserComponent } from './actions-on-user/actions-on-user.component';
+import { ModeratorDashboardComponent } from './moderator-dashboard/moderator-dashboard.component';
+import { ActionsOnSectionComponent } from './actions-on-section/actions-on-section.component';
 
 
 
@@ -27,7 +29,9 @@ const routes: Routes = [
   { path : 'login', component: LoginComponent},
   { path : 'register', component: RegistrationComponent},
   { path : "admindashboard", component: AdmindashboardComponent},
-  { path : "admindashboard/actionsonuser/:userId", component: ActionsOnUserComponent}
+  { path : "admindashboard/actionsonuser/:userId", component: ActionsOnUserComponent},
+  { path : "moderatordashboard", component : ModeratorDashboardComponent},
+  { path : "moderatordashboard/actionsonsection/:sectionId", component : ActionsOnSectionComponent},
 ];
 
 @NgModule({
