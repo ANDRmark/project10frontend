@@ -49,7 +49,6 @@
               <td>{{DatetoString(section.CreateDate)}}</td>
               <td>
                 <a routerLink="{{currentUrl}}/actionsonsection/{{section.Id}}">Manage</a> &nbsp;
-                <button type="button">Select</button>
               </td>
             </tr>
           </ng-template>
@@ -78,15 +77,20 @@
           <br>
           <button type="button" (click)="GetAllThemesClick()">Get all themes</button>
           <br>
+          <label>Section Id:
+              <input type="text" #SectionIdForThemeSelectionInput placeholder="Exact ID of section">
+          </label>
+          <button type="button" (click)="GetThemesBySectionIdClick()">Get themes by section Id</button>
+          <br>
           <label>Id:
             <input type="text" #ThemeIdInput placeholder="Exact ID of theme">
           </label>
-          <button type="button" (click)="SearchThemeByIdClick()">Search</button>
+          <button type="button" (click)="GetThemesByIdClick()">Get theme by theme Id</button>
           <br>
           <label>Name:
             <input type="text" #ThemeNameInput placeholder="Part of Name of theme">
           </label>
-          <button type="button" (click)="SearchThemeByNameClick()">Search</button>
+          <button type="button" (click)="SearchThemeByNameClick()">Search by Name</button>
           <br>
         </div>
         <div>
@@ -94,6 +98,7 @@
           <table border="1">
             <tr>
               <th>ID</th>
+              <th>Section ID</th>
               <th>Name</th>
               <th>Create date</th>
               <th></th>
@@ -102,19 +107,29 @@
             <ng-template #themespresent>
               <tr *ngFor="let theme of themes">
                 <td>{{theme.Id}}</td>
-                <td>{{theme.Name}}</td>
-                <td>{{theme.Createdate}}</td>
+                <td>{{theme.SectionId}}</td>
+                <td>{{theme.Title}}</td>
+                <td>{{DatetoString(theme.CreateDate)}}</td>
                 <td>
-                  <a routerLink="{{currentUrl}}/actionsonuser/{{user.Id}}">Manage</a> &nbsp;
+                  <a routerLink="{{currentUrl}}/actionsontheme/{{theme.Id}}">Manage</a> &nbsp;
                   <button type="button">Select</button>
                 </td>
               </tr>
             </ng-template>
             <ng-template #nothemes>
-              <tr>
-                <td colspan="5"> No themes</td>
-              </tr>
-            </ng-template>
+                <ng-container *ngIf="themes && themes.length == 0;then themesnotfound else nothemesresult"></ng-container>
+    
+                <ng-template #themesnotfound>
+                  <tr>
+                    <td colspan="5"> No themes found</td>
+                  </tr>
+                </ng-template>
+                <ng-template #nothemesresult>
+                    <tr>
+                      <td colspan="5"> (Empty))</td>
+                    </tr>
+                  </ng-template>
+              </ng-template>
           </table>
         </div>
       </div>
@@ -123,6 +138,10 @@
       <div>
           <div>
             Select message:
+            <br>
+            <label>Theme Id:
+                <input type="text" #MessageIdInput placeholder="Exact ID of theme where to search messages">
+              </label>
             <br>
             <button type="button" (click)="GetAllMessagesClick()">Get all messages</button>
             <br>

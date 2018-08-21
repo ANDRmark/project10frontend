@@ -16,6 +16,8 @@ import { AddNewSectionComponent } from './add-new-section/add-new-section.compon
 import { ActionsOnUserComponent } from './actions-on-user/actions-on-user.component';
 import { ModeratorDashboardComponent } from './moderator-dashboard/moderator-dashboard.component';
 import { ActionsOnSectionComponent } from './actions-on-section/actions-on-section.component';
+import { ActionsOnThemeComponent } from './actions-on-theme/actions-on-theme.component';
+import { ActionsOnMessageComponent } from './actions-on-message/actions-on-message.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { ActionsOnSectionComponent } from './actions-on-section/actions-on-secti
     AddNewSectionComponent,
     ActionsOnUserComponent,
     ModeratorDashboardComponent,
-    ActionsOnSectionComponent
+    ActionsOnSectionComponent,
+    ActionsOnThemeComponent,
+    ActionsOnMessageComponent
   ],
   imports: [
     BrowserModule,

@@ -22,6 +22,18 @@ export class ThemeService {
     );
   }
 
+  
+  GetAllThemes(): Observable<any> {
+    var url = "api/Theme/GetAllThemes";
+    var headers = new HttpHeaders();
+    if (this.authenticationService.isAuthenticated()) {
+      headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
+    }
+    return this.http.get<any>(url, { "headers": headers }).pipe(
+      catchError(this.handleError("GetAllThemes"))
+    );
+  }
+
   getTheme(id: number) {
     var url = "api/Theme/GetTheme/" + id;
     var headers = new HttpHeaders();
