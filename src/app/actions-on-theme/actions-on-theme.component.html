@@ -1,3 +1,74 @@
-<p>
-  actions-on-theme works!
-</p>
+<div>
+  Here you can delete theme, rename theme etc ...
+  <br>
+  <div *ngIf="theme">
+    <table>
+      <tr>
+        <th colspan="2">Current information about theme: </th>
+      </tr>
+      <tr>
+        <td>Id: </td>
+        <td>{{theme.Id}}</td>
+      </tr>
+      <tr>
+        <td>SectionId:</td>
+        <td>{{theme.SectionId}}</td>
+      </tr>
+      <tr>
+        <td>Create Date: </td>
+        <td>{{DatetoString(theme.CreateDate)}}</td>
+      </tr>
+      <tr>
+        <td>Theme Name:</td>
+        <td>{{theme.Title}}</td>
+      </tr>
+    </table>
+    <br>
+    <div>
+      Actions:
+      <br>
+      <div>
+        Renaming theme:
+        <br>
+        <label> New Name:
+          <input type="text" #NewThemeNameInput placeholder="New theme Name"> </label>
+        <br>
+        <button type="button" (click)="renamethemeClick()">Rename theme</button>
+        <br>
+        <br>
+      </div>
+      <div>
+        Move theme to other section:
+        <br>
+        <label> New Section Id:
+          <input type="text" #NewSectionIdInput placeholder="New Section Id"> </label>
+        <br>
+        <button type="button" (click)="movethemeClick()">Chamge Section Id</button>
+        <br>
+        <br>
+      </div>
+      <div>
+        Deleting theme:
+        <br> Be careful when deleting theme, all messages in that section will be deleted
+        <br>
+        <button type="button" (click)="deleteThemeClick()">Delete theme</button>
+        <br>
+        <br>
+      </div>
+    </div>
+  </div>
+  <div>
+    {{errorMessage}}
+  </div>
+  <div #Errors *ngIf="errorMessages">
+    Error list:
+    <ul>
+      <li *ngFor="let errorlistnamevaluepair of generateErrorMessagesArray(errorMessages)">
+        {{errorlistnamevaluepair.name}}
+        <ul>
+          <li *ngFor="let singleerror of errorlistnamevaluepair.value">{{singleerror}}</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

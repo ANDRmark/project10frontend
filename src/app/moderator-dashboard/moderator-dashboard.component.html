@@ -77,21 +77,25 @@
           <br>
           <button type="button" (click)="GetAllThemesClick()">Get all themes</button>
           <br>
+
+          <label>Id:
+              <input type="text" #ThemeIdInput placeholder="Exact ID of theme">
+            </label>
+            <button type="button" (click)="GetThemesByIdClick()">Get theme by theme Id</button>
+            <br>
+
           <label>Section Id:
               <input type="text" #SectionIdForThemeSelectionInput placeholder="Exact ID of section">
           </label>
           <button type="button" (click)="GetThemesBySectionIdClick()">Get themes by section Id</button>
           <br>
-          <label>Id:
-            <input type="text" #ThemeIdInput placeholder="Exact ID of theme">
-          </label>
-          <button type="button" (click)="GetThemesByIdClick()">Get theme by theme Id</button>
-          <br>
+
           <label>Name:
-            <input type="text" #ThemeNameInput placeholder="Part of Name of theme">
+            <input type="text" #ThemeNamePartInput placeholder="Part of Name of theme">
           </label>
-          <button type="button" (click)="SearchThemeByNameClick()">Search by Name</button>
+          <button type="button" (click)="SearchThemesByThemeNamePartClick()">Search themes by Name</button>
           <br>
+
         </div>
         <div>
           Found Themes:
@@ -112,7 +116,6 @@
                 <td>{{DatetoString(theme.CreateDate)}}</td>
                 <td>
                   <a routerLink="{{currentUrl}}/actionsontheme/{{theme.Id}}">Manage</a> &nbsp;
-                  <button type="button">Select</button>
                 </td>
               </tr>
             </ng-template>
@@ -139,24 +142,19 @@
           <div>
             Select message:
             <br>
-            <label>Theme Id:
-                <input type="text" #MessageIdInput placeholder="Exact ID of theme where to search messages">
+            <label>Theme Id (Required):
+                <input type="text" #ThemeIdForMessagesInput placeholder="Exact ID of theme where to search messages">
               </label>
-            <br>
-            <button type="button" (click)="GetAllMessagesClick()">Get all messages</button>
-            <br>
-            <label>Id:
-              <input type="text" #MessageIdInput placeholder="Exact ID of message">
-            </label>
-            <button type="button" (click)="SearchMessagesByIdClick()">Search by Id</button>
             <br>
             <label>Author Name:
               <input type="text" #MessageAuthorInput placeholder="Part of Name of author of message">
             </label>
+            <br>
             <label>Part of Message:
-                <input type="text" #MessagePartInput placeholder="some words frome message">
+                <input type="text" #MessageBodyPartInput placeholder="some words frome message">
               </label>
-            <button type="button" (click)="SearchMessagesByAuthorNameAndMessageBodyClick()">Search by Author and Message Body</button>
+              <br>
+            <button type="button" (click)="SearchMessagesByAuthorNameAndMessageBodyClick()">Search by Theme, Author and Message Body</button>
             <br>
           </div>
           <div>
@@ -167,23 +165,34 @@
                 <th>Author</th>
                 <th>Create date</th>
                 <th>Message Body</th>
+                <th></th>
               </tr>
               <ng-container *ngIf="messages && messages.length > 0;then messagespresent else nomessages">here is ignored</ng-container>
               <ng-template #messagespresent>
                 <tr *ngFor="let message of messages">
                   <td>{{message.Id}}</td>
-                  <td>{{message.Name}}</td>
-                  <td>{{message.Createdate}}</td>
+                  <td>{{message.UserName}}</td>
+                  <td>{{DatetoString(message.CreateDate)}}</td>
+                  <td>{{message.MessageBody}}</td>
                   <td>
-                    <a routerLink="{{currentUrl}}/actionsonuser/{{user.Id}}">Manage</a> &nbsp;
+                    <a routerLink="{{currentUrl}}/actionsonmessage/{{message.Id}}">Manage</a> &nbsp;
                   </td>
                 </tr>
               </ng-template>
               <ng-template #nomessages>
-                <tr>
-                  <td colspan="5"> No messages</td>
-                </tr>
-              </ng-template>
+                  <ng-container *ngIf="messages && messages.length == 0;then messagesnotfound else nomessagesresult"></ng-container>
+      
+                  <ng-template #messagesnotfound>
+                    <tr>
+                      <td colspan="5"> No messages found</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template #nomessagesresult>
+                      <tr>
+                        <td colspan="5"> (Empty))</td>
+                      </tr>
+                    </ng-template>
+                </ng-template>
             </table>
           </div>
         </div>

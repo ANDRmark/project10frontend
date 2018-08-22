@@ -1,3 +1,71 @@
-<p>
-  actions-on-message works!
-</p>
+<div>
+  Here you can delete message, move message etc ...
+  <br>
+  <div *ngIf="message">
+    <table>
+      <tr>
+        <th colspan="2">Current information about message: </th>
+      </tr>
+      <tr>
+        <td>Id: </td>
+        <td>{{message.Id}}</td>
+      </tr>
+      <tr>
+        <td>ThemeId:</td>
+        <td>{{message.ThemeId}}</td>
+      </tr>
+      <tr>
+        <td>UserId:</td>
+        <td>{{message.UserId}}</td>
+      </tr>
+      <tr>
+        <td>UserName:</td>
+        <td>{{message.UserName}}</td>
+      </tr>
+      <tr>
+        <td>MessageBody:</td>
+        <td>{{message.MessageBody}}</td>
+      </tr>
+      <tr>
+        <td>Create Date: </td>
+        <td>{{DatetoString(message.CreateDate)}}</td>
+      </tr>
+    </table>
+    <br>
+    <div>
+      Actions:
+      <br>
+      <div>
+        Move message to other theme:
+        <br>
+        <label> New Theme Id:
+          <input type="text" #NewThemeIdInput placeholder="New Theme Id"> </label>
+        <br>
+        <button type="button" (click)="movemessageClick()">Chamge Theme Id</button>
+        <br>
+        <br>
+      </div>
+      <div>
+        Deleting message:
+        <br>
+        <button type="button" (click)="deleteMessageClick()">Delete message</button>
+        <br>
+        <br>
+      </div>
+    </div>
+  </div>
+  <div>
+    {{errorMessage}}
+  </div>
+  <div #Errors *ngIf="errorMessages">
+    Error list:
+    <ul>
+      <li *ngFor="let errorlistnamevaluepair of generateErrorMessagesArray(errorMessages)">
+        {{errorlistnamevaluepair.name}}
+        <ul>
+          <li *ngFor="let singleerror of errorlistnamevaluepair.value">{{singleerror}}</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

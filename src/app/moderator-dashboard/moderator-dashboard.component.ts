@@ -26,14 +26,20 @@ export class ModeratorDashboardComponent implements OnInit, OnDestroy {
   ) { }
   @ViewChild('SectionIdInput') SectionIdInput: ElementRef;
   @ViewChild('SectionNameInput') SectionNameInput: ElementRef;
+
   @ViewChild('SectionIdForThemeSelectionInput') SectionIdForThemeSelectionInput: ElementRef;
   @ViewChild('ThemeIdInput') ThemeIdInput: ElementRef;
+  @ViewChild('ThemeNamePartInput') ThemeNamePartInput: ElementRef;
+
+  @ViewChild('ThemeIdForMessagesInput') ThemeIdForMessagesInput: ElementRef; 
+  @ViewChild('MessageAuthorInput') MessageAuthorInput: ElementRef;
+  @ViewChild('MessageBodyPartInput') MessageBodyPartInput: ElementRef;
   private ngUnsubscribe: Subject<object> = new Subject();
   sections: any[] = null;
   themes: any[] = null;
   messages: any[] = null;
   errorMessage = " ";
-  errorMessages: any;
+  errorMessages: any = null;
   currentUrl: string;
 
   ngOnInit() {
@@ -58,9 +64,7 @@ export class ModeratorDashboardComponent implements OnInit, OnDestroy {
     this.errorMessages = null;
   }
   DatetoString(datestr: Date) {
-    console.log(datestr);
     var date = new Date(datestr);
-    console.log(date);
     return `${date.toISOString().split('T')[0]}   ${date.toLocaleTimeString().split(' ')[0]}`;
   }
 
@@ -77,7 +81,7 @@ export class ModeratorDashboardComponent implements OnInit, OnDestroy {
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
             this.errorMessage = "Invalid request; ";
-            this.errorMessages = this.generateErrorMessagesArray(e.error.ModelState)
+            this.errorMessages = e.error.ModelState;
           }
           else {
             if (e.error.hasOwnProperty("Message")) {
@@ -175,7 +179,7 @@ export class ModeratorDashboardComponent implements OnInit, OnDestroy {
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
             this.errorMessage = "Invalid request; ";
-            this.errorMessages = this.generateErrorMessagesArray(e.error.ModelState)
+            this.errorMessages = e.error.ModelState;
           }
           else {
             if (e.hasOwnProperty("status") && e.status == 404) {
@@ -207,7 +211,7 @@ export class ModeratorDashboardComponent implements OnInit, OnDestroy {
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
             this.errorMessage = "Invalid request; ";
-            this.errorMessages = this.generateErrorMessagesArray(e.error.ModelState)
+            this.errorMessages = e.error.ModelState;
           }
           else {
             if (e.error.hasOwnProperty("Message")) {
@@ -255,14 +259,39 @@ export class ModeratorDashboardComponent implements OnInit, OnDestroy {
       );
   }
 
-  GetThemesBySectionIdClick() {
+  searchThemesByNamePart(namePart: string) {
+    this.themes = null;
     this.clearErrors();
+    this.themeService.searchThemesByNamePart(namePart)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        if (data != null && data.hasOwnProperty("themes")) {
+            this.themes = data.themes;
+        }
+      },
+        (e: any) => {
+          if (e.error.hasOwnProperty("ModelState")) {
+            this.errorMessage = "Invalid argument for Theme name; ";
+            this.errorMessages = e.error.ModelState;
+          }
+          else {
+              if (e.error.hasOwnProperty("Message")) {
+                this.errorMessage = e.error.Message;
+              }
+              else {
+                this.errorMessage = "Error occured while getting information about themes.";
+              }
+          }
+        }
+      );
+  }
+
+  GetThemesBySectionIdClick() {
     var sectionId = this.SectionIdForThemeSelectionInput.nativeElement.value;
     this.getThemesBySelectedSection(sectionId);
   }
 
   GetThemesByIdClick() {
-    this.clearErrors();
     var themeId = this.ThemeIdInput.nativeElement.value;
     this.getThemeById(themeId);
   }
@@ -271,4 +300,48 @@ export class ModeratorDashboardComponent implements OnInit, OnDestroy {
     this.getAllThemes();
   }
 
+  SearchThemesByThemeNamePartClick(){
+    var themenamePart = this.ThemeNamePartInput.nativeElement.value;
+    this.searchThemesByNamePart(themenamePart);
+  }
+
+
+  searchMessagesByThemeandAuthorAndMessageBody(themeId:number, author, messageBody) {
+    this.messages = null;
+    this.clearErrors();
+    this.messageService.searchMessagesByThemeandAuthorAndMessageBody(themeId,author,messageBody)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        if (data != null && data.hasOwnProperty("messages")) {
+          this.messages = data.messages;
+        }
+      },
+        (e: any) => {
+          if (e.error.hasOwnProperty("ModelState")) {
+            this.errorMessage = "Invalid request; ";
+            this.errorMessages = e.error.ModelState;
+          }
+          else {
+            if (e.hasOwnProperty("status") && e.status == 404 ) {
+              this.errorMessage = "Invalid request, theme id is not correct.";
+            } else{
+            if (e.error.hasOwnProperty("Message")) {
+              this.errorMessage = e.error.Message;
+            }
+            else {
+              this.errorMessage = "Error occured while getting information about messages.";
+            }
+          }
+          }
+        }
+      );
+  }
+
+
+  SearchMessagesByAuthorNameAndMessageBodyClick(){
+    var themeId = this.ThemeIdForMessagesInput.nativeElement.value;
+    var author = this.MessageAuthorInput.nativeElement.value;
+    var messageBody = this.MessageBodyPartInput.nativeElement.value;
+    this.searchMessagesByThemeandAuthorAndMessageBody(themeId,author,messageBody);
+  }
 }
