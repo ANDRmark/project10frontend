@@ -38,7 +38,7 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
   getUsersByName(username: string) {
     this.users = null;
     this.clearErrors();
-    this.userService.getUsersByNamePart(username)
+    this.userService.SearchUsersByUserNamePart(username)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
         if (data != null && data.hasOwnProperty("users")) {
@@ -78,14 +78,20 @@ export class AdmindashboardComponent implements OnInit, OnDestroy {
       },
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
-            this.errorMessage = "Invalid argument for Id; ";
+            this.errorMessage = "Invalid request; ";
+            this.errorMessages = e.error.ModelState;
           }
           else {
-            if (e.error.hasOwnProperty("Message")) {
-              this.errorMessage = e.error.Message;
+            if (e.hasOwnProperty("status") && e.status == 404) {
+              this.errorMessage = "Invalid request,  id is not correct;";
             }
             else {
-              this.errorMessage = "Error occured while getting information about users.";
+              if (e.error.hasOwnProperty("Message")) {
+                this.errorMessage = e.error.Message;
+              }
+              else {
+                this.errorMessage = "Error occured while getting information about user.";
+              }
             }
           }
         }

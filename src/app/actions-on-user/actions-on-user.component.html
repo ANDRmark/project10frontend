@@ -24,12 +24,6 @@
         </tr>
     </table> 
     <br>
-    <!-- Current information about user: <br>
-    Id: {{user.Id}}<br>
-    UserName: {{user.UserName}}<br>
-    Email: {{user.Email}}<br>
-    Roles: <ng-container *ngIf="user.Roles"><ng-container *ngFor="let role of user.Roles">{{role.Name}}; </ng-container></ng-container><br>
-    <br> -->
     <div>
       Actions: <br>
       <div>
@@ -37,7 +31,7 @@
         <label><input type="checkbox" #RoleUserCheckbox [checked]="isUserInRole('User')">User</label> <br>
         <label><input type="checkbox" #RoleModeratorCheckbox [checked]="isUserInRole('Moderator')">Moderator</label>  <br>
         <label><input type="checkbox" #RoleAdminCheckbox [checked]="isUserInRole('Admin')">Admin</label>  <br>
-        <button type="button" (click)="applyRoles()">Apply roles</button> <br>
+        <button type="button" (click)="assignNewRolesClick()">Apply roles</button> <br>
         <br>
       </div>
       <div>

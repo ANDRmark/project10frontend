@@ -14,7 +14,7 @@ export class MessagesService {
 
 
   getMessageById(id:number):Observable<any>{
-    var url = "/api/Message/GetMessage/"+id;
+    var url = "/api/Message/"+id;
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
       headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
@@ -36,7 +36,7 @@ export class MessagesService {
   }
 
   sendNewMessage(themeId:number, messageBody:string){
-    var url = "api/Message/InsertNewMessage";
+    var url = "api/Message";
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
       headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
@@ -69,7 +69,7 @@ export class MessagesService {
 
 
   UpdateMessage(messagetoUpdate){
-    var url = "api/Message/UpdateMessage";
+    var url = "api/Message";
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
       var t = this.authenticationService.retrieveStoredAccessToken();
@@ -77,20 +77,19 @@ export class MessagesService {
     }
     headers = headers.append("Content-Type", "application/json");
     var data = messagetoUpdate;
-    return this.http.post(url, data, {headers:headers}).pipe(
+    return this.http.put(url, data, {headers:headers}).pipe(
       catchError(this.handleError("UpdateMessage"))
     );
   }
 
   DeleteMessage(messageId:number){
-    var url = "api/Message/DeleteMessage";
+    var url = "api/Message/"+messageId;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     headers = headers.append("Content-Type", "application/json");
-    var data = {MessageId:messageId};
-    return this.http.post<any>(url, data, { headers: headers }).pipe(
+    return this.http.delete<any>(url, { headers: headers }).pipe(
       catchError(this.handleError("DeleteMessage"))
     );
   }

@@ -21,7 +21,7 @@ export class ActionsOnSectionComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
     private location: Location,
-  private sectionService:SectionsService) { }
+    private sectionService: SectionsService) { }
   @ViewChild('NewSectionNameInput') NewSectionNameInput: ElementRef;
   private ngUnsubscribe: Subject<object> = new Subject();
   sectionId: number;
@@ -63,81 +63,112 @@ export class ActionsOnSectionComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
         if (data != null && data.hasOwnProperty("section") && data.section != null) {
-            this.section = data.section;
-          } else{
-            this.errorMessage = " Section not found  ";
-          }
+          this.section = data.section;
+        } else {
+          this.errorMessage = " Section not found  ";
+        }
       },
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
             this.errorMessage = "Invalid request; ";
-            this.errorMessages =  e.error.ModelState;
+            this.errorMessages = e.error.ModelState;
           }
           else {
-            if (e.error.hasOwnProperty("Message")) {
-              this.errorMessage =  e.error.Message;
+            if (e.hasOwnProperty("status") && e.status == 404) {
+              this.errorMessage = "Invalid request,  id is not correct;";
             }
             else {
-              this.errorMessage = "Error occured while getting information about section.";
+              if (e.error.hasOwnProperty("Message")) {
+                this.errorMessage = e.error.Message;
+              }
+              else {
+                this.errorMessage = "Error occured while getting information about section.";
+              }
             }
           }
         }
       );
   }
 
-  renameSection(){
-    var newName = this.NewSectionNameInput.nativeElement.value;
+
+  updateSection(section) {
+    section.Id = this.sectionId;
     this.clearErrors();
-    this.sectionService.RenameSection(this.sectionId, newName)
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(data => {
-      //all good
-      this.ngOnInit();
-    },
-      (e: any) => {
-        if (e.error.hasOwnProperty("ModelState")) {
-          this.errorMessage = "Invalid request; ";
-          this.errorMessages = e.error.ModelState;
-        }
-        else {
-          if (e.error.hasOwnProperty("Message")) {
-            this.errorMessage =  e.error.Message;
+    this.sectionService.UpdateSection(section)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        //all good
+        this.ngOnInit();
+      },
+        (e: any) => {
+          if (e.error.hasOwnProperty("ModelState")) {
+            this.errorMessage = "Invalid request; ";
+            this.errorMessages = e.error.ModelState;
           }
           else {
-            this.errorMessage = "Error occured while renaming section.";
+            if (e.hasOwnProperty("status") && e.status == 404) {
+              this.errorMessage = "Invalid request,  id is not correct;";
+            }
+            else {
+              if (e.error.hasOwnProperty("Message")) {
+                this.errorMessage = e.error.Message;
+              }
+              else {
+                this.errorMessage = "Error occured while updating information about section.";
+              }
+            }
           }
         }
-      }
-    );
+      );
   }
-  DatetoString(datestr:Date){
+
+
+  DatetoString(datestr: Date) {
     var date = new Date(datestr);
     return `${date.toISOString().split('T')[0]}   ${date.toLocaleTimeString().split(' ')[0]}`;
   }
 
-  deleteSection(){
+  deleteSection() {
     this.clearErrors();
     this.sectionService.DeleteSection(this.sectionId)
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(data => {
-      //all good
-      this.ngOnInit();
-    },
-      (e: any) => {
-        if (e.error.hasOwnProperty("ModelState")) {
-          this.errorMessage = "Invalid request; ";
-          this.errorMessages = e.error.ModelState;
-        }
-        else {
-          if (e.error.hasOwnProperty("Message")) {
-            this.errorMessage = e.error.Message;
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        //all good
+        this.ngOnInit();
+      },
+        (e: any) => {
+          if (e.error.hasOwnProperty("ModelState")) {
+            this.errorMessage = "Invalid request; ";
+            this.errorMessages = e.error.ModelState;
           }
           else {
-            this.errorMessage = "Error occured while deleting section.";
+            if (e.hasOwnProperty("status") && e.status == 404) {
+              this.errorMessage = "Invalid request,  id is not correct;";
+            }
+            else {
+              if (e.error.hasOwnProperty("Message")) {
+                this.errorMessage = e.error.Message;
+              }
+              else {
+                this.errorMessage = "Error occured while deleting section.";
+              }
+            }
           }
         }
-      }
-    );
+      );
+  }
+
+  renameSectionClick() {
+    var newName = this.NewSectionNameInput.nativeElement.value;
+    if (this.section != null) {
+      //update info via  copy, so if update fails then user can see original (previous) values
+      var sectiontoUpdate = JSON.parse(JSON.stringify(this.section));
+      var newName = this.NewSectionNameInput.nativeElement.value;
+      sectiontoUpdate.Title = newName;
+      this.updateSection(sectiontoUpdate);
+    } else {
+      this.errorMessage = " Section not found, cannt rename section.";
+    }
   }
 
 

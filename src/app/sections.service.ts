@@ -13,7 +13,7 @@ export class SectionsService {
 
   
   getAllSections(): Observable<any> {
-    var url = "api/Section/GetSections";
+    var url = "api/Section/GetAll";
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
@@ -36,21 +36,19 @@ export class SectionsService {
   }
 
   getSection(id: number) {
-    var url = "api/Section/GetSection";
-    var params = new HttpParams();
-    params = params.set('sectionId', id.toString());
+    var url = "api/Section/"+id;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
-    return this.http.get<any>(url, { "headers": headers, params:params }).pipe(
+    return this.http.get<any>(url, { "headers": headers }).pipe(
       catchError(this.handleError("getSection"))
     );
   }
 
 
   sendNewSection(sectionName:string){
-    var url = "api/Section/InsertNewSection";
+    var url = "api/Section";
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
       var t = this.authenticationService.retrieveStoredAccessToken();
@@ -63,29 +61,29 @@ export class SectionsService {
     );
   }
 
-  RenameSection(sectionId:number, newSectionName:string){
-    var url = "api/Section/RenameSection";
+
+  UpdateSection(sectiontoUpdate){
+    var url = "api/Section";
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
       var t = this.authenticationService.retrieveStoredAccessToken();
       headers = headers.append("Authorization","Bearer "+this.authenticationService.retrieveStoredAccessToken())
     }
     headers = headers.append("Content-Type", "application/json");
-    var data = {SectionId:sectionId, NewSectionName:newSectionName}
-    return this.http.post(url, data, {headers:headers}).pipe(
-      catchError(this.handleError("RenameSection"))
+    var data = sectiontoUpdate;
+    return this.http.put(url, data, {headers:headers}).pipe(
+      catchError(this.handleError("UpdateSection"))
     );
   }
 
   DeleteSection(sectionId:number){
-    var url = "api/Section/DeleteSection";
+    var url = "api/Section/"+sectionId;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     headers = headers.append("Content-Type", "application/json");
-    var data = {SectionId:sectionId};
-    return this.http.post<any>(url, data, { headers: headers }).pipe(
+    return this.http.delete<any>(url, { headers: headers }).pipe(
       catchError(this.handleError("DeleteSection"))
     );
   }

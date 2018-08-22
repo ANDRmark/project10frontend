@@ -70,20 +70,25 @@ export class ActionsOnMessageComponent implements OnInit, OnDestroy {
         if (data != null && data.hasOwnProperty("message") && data.message != null) {
             this.message = data.message;
           } else{
-            this.errorMessage = " Theme not found  ";
+            this.errorMessage = " Message not found  ";
           }
       },
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
             this.errorMessage = "Invalid request; ";
-            this.errorMessages =  e.error.ModelState;
+            this.errorMessages = e.error.ModelState;
           }
           else {
-            if (e.error.hasOwnProperty("Message")) {
-              this.errorMessage =  e.error.Message;
+            if (e.hasOwnProperty("status") && e.status == 404) {
+              this.errorMessage = "Invalid request,  id is not correct;";
             }
             else {
-              this.errorMessage = "Error occured while getting information about message.";
+              if (e.error.hasOwnProperty("Message")) {
+                this.errorMessage = e.error.Message;
+              }
+              else {
+                this.errorMessage = "Error occured while getting information about message.";
+              }
             }
           }
         }
@@ -130,11 +135,16 @@ export class ActionsOnMessageComponent implements OnInit, OnDestroy {
           this.errorMessages = e.error.ModelState;
         }
         else {
-          if (e.error.hasOwnProperty("Message")) {
-            this.errorMessage = e.error.Message;
+          if (e.hasOwnProperty("status") && e.status == 404) {
+            this.errorMessage = "Invalid request,  id is not correct;";
           }
           else {
-            this.errorMessage = "Error occured while deleting message.";
+            if (e.error.hasOwnProperty("Message")) {
+              this.errorMessage = e.error.Message;
+            }
+            else {
+              this.errorMessage = "Error occured while deleting message.";
+            }
           }
         }
       }

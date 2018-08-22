@@ -82,35 +82,6 @@ export class ActionsOnUserComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  applyRoles() {
-    var roles = {
-      IsUser: this.RoleUserCheckbox.nativeElement.checked,
-      IsModerator: this.RoleModeratorCheckbox.nativeElement.checked,
-      IsAdmin: this.RoleAdminCheckbox.nativeElement.checked,
-    }
-    this.clearErrors();
-    this.userService.setRoles(this.userId, roles)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(data => {
-        //all good
-        this.ngOnInit();
-      },
-        (e: any) => {
-          if (e.error.hasOwnProperty("ModelState")) {
-            this.errorMessages = e.error.ModelState;
-            this.errorMessage = "Request is invalid; ";
-          }
-          else {
-            if (e.error.hasOwnProperty("Message")) {
-              this.errorMessage = e.error.Message;
-            }
-            else {
-              this.errorMessage = "Error occured while assigning new roles to user";
-            }
-          }
-        }
-      );;
-  }
 
   deleteUser(){
     this.clearErrors();
@@ -122,19 +93,55 @@ export class ActionsOnUserComponent implements OnInit, OnDestroy {
       },
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
+            this.errorMessage = "Invalid request; ";
             this.errorMessages = e.error.ModelState;
-            this.errorMessage = "Request is invalid; ";
+          }
+          else {
+            if (e.hasOwnProperty("status") && e.status == 404) {
+              this.errorMessage = "Invalid request,  id is not correct;";
+            }
+            else {
+              if (e.error.hasOwnProperty("Message")) {
+                this.errorMessage = e.error.Message;
+              }
+              else {
+                this.errorMessage = "Error occured while deleting user.";
+              }
+            }
+          }
+        }
+      );
+  }
+
+  updateUser(user){
+    user.Id = this.userId;
+    this.clearErrors();
+    this.userService.updateUser(user)
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(data => {
+      //all good
+      this.ngOnInit();
+    },
+      (e: any) => {
+        if (e.error.hasOwnProperty("ModelState")) {
+          this.errorMessage = "Invalid request; ";
+          this.errorMessages = e.error.ModelState;
+        }
+        else {
+          if (e.hasOwnProperty("status") && e.status == 404) {
+            this.errorMessage = "Invalid request,  id is not correct;";
           }
           else {
             if (e.error.hasOwnProperty("Message")) {
               this.errorMessage = e.error.Message;
             }
             else {
-              this.errorMessage = "Error occured while deleting user";
+              this.errorMessage = "Error occured while updating information about user.";
             }
           }
         }
-      );
+      }
+    );
   }
 
   generateErrorMessagesArray(obj) {
@@ -146,6 +153,27 @@ export class ActionsOnUserComponent implements OnInit, OnDestroy {
       }
     });
     return errormessages;
+  }
+
+  assignNewRolesClick(){
+    if(this.user != null){
+       //update info via theme copy, so if update fails then user can see original (previous) theme
+      var usertoUpdate = JSON.parse(JSON.stringify(this.user));
+      var newRoles:any[] = [];
+      if(this.RoleUserCheckbox.nativeElement.checked){
+        newRoles.push({Name:"User"});
+      }
+      if(this.RoleModeratorCheckbox.nativeElement.checked){
+        newRoles.push({Name:"Moderator"});
+      }
+      if(this.RoleAdminCheckbox.nativeElement.checked){
+        newRoles.push({Name:"Admin"});
+      }
+      usertoUpdate.Roles = newRoles;
+      this.updateUser(usertoUpdate);
+    } else{
+      this.errorMessage = " Theme not found, cannt rename.";
+    }
   }
 
   clearErrors() {

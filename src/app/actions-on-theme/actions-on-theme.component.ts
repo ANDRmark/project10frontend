@@ -77,14 +77,19 @@ export class ActionsOnThemeComponent implements OnInit, OnDestroy {
         (e: any) => {
           if (e.error.hasOwnProperty("ModelState")) {
             this.errorMessage = "Invalid request; ";
-            this.errorMessages =  e.error.ModelState;
+            this.errorMessages = e.error.ModelState;
           }
           else {
-            if (e.error.hasOwnProperty("Message")) {
-              this.errorMessage =  e.error.Message;
+            if (e.hasOwnProperty("status") && e.status == 404) {
+              this.errorMessage = "Invalid request, theme  id is not correct;";
             }
             else {
-              this.errorMessage = "Error occured while getting information about section.";
+              if (e.error.hasOwnProperty("Message")) {
+                this.errorMessage = e.error.Message;
+              }
+              else {
+                this.errorMessage = "Error occured while getting information about tmeme.";
+              }
             }
           }
         }
@@ -106,11 +111,16 @@ export class ActionsOnThemeComponent implements OnInit, OnDestroy {
           this.errorMessages = e.error.ModelState;
         }
         else {
-          if (e.error.hasOwnProperty("Message")) {
-            this.errorMessage =  e.error.Message;
+          if (e.hasOwnProperty("status") && e.status == 404) {
+            this.errorMessage = "Invalid request,  id is not correct;";
           }
           else {
-            this.errorMessage = "Error occured while updating information about theme.";
+            if (e.error.hasOwnProperty("Message")) {
+              this.errorMessage = e.error.Message;
+            }
+            else {
+              this.errorMessage = "Error occured while updating information about theme.";
+            }
           }
         }
       }
@@ -131,11 +141,16 @@ export class ActionsOnThemeComponent implements OnInit, OnDestroy {
           this.errorMessages = e.error.ModelState;
         }
         else {
-          if (e.error.hasOwnProperty("Message")) {
-            this.errorMessage = e.error.Message;
+          if (e.hasOwnProperty("status") && e.status == 404) {
+            this.errorMessage = "Invalid request,  id is not correct;";
           }
           else {
-            this.errorMessage = "Error occured while deleting section.";
+            if (e.error.hasOwnProperty("Message")) {
+              this.errorMessage = e.error.Message;
+            }
+            else {
+              this.errorMessage = "Error occured while deleting theme.";
+            }
           }
         }
       }

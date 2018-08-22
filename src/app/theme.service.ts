@@ -35,7 +35,7 @@ export class ThemeService {
   }
 
   getTheme(id: number) {
-    var url = "api/Theme/GetTheme/" + id;
+    var url = "api/Theme/" + id;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
@@ -59,7 +59,7 @@ export class ThemeService {
   }
 
   sendNewTheme(sectionId:number,themeName:string){
-    var url = "api/Theme/InsertNewTheme";
+    var url = "api/Theme";
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
       var t = this.authenticationService.retrieveStoredAccessToken();
@@ -73,7 +73,7 @@ export class ThemeService {
   }
 
   UpdateTheme(themetoUpdate){
-    var url = "api/Theme/UpdateTheme";
+    var url = "api/Theme";
     var headers = new HttpHeaders();
     if(this.authenticationService.isAuthenticated()){
       var t = this.authenticationService.retrieveStoredAccessToken();
@@ -81,20 +81,19 @@ export class ThemeService {
     }
     headers = headers.append("Content-Type", "application/json");
     var data = themetoUpdate;
-    return this.http.post(url, data, {headers:headers}).pipe(
+    return this.http.put(url, data, {headers:headers}).pipe(
       catchError(this.handleError("UpdateTheme"))
     );
   }
 
   DeleteTheme(themeId:number){
-    var url = "api/Theme/DeleteTheme";
+    var url = "api/Theme/"+themeId;
     var headers = new HttpHeaders();
     if (this.authenticationService.isAuthenticated()) {
       headers = headers.append("Authorization", "Bearer " + this.authenticationService.retrieveStoredAccessToken())
     }
     headers = headers.append("Content-Type", "application/json");
-    var data = {ThemeId:themeId};
-    return this.http.post<any>(url, data, { headers: headers }).pipe(
+    return this.http.delete<any>(url, { headers: headers }).pipe(
       catchError(this.handleError("DeleteTheme"))
     );
   }
