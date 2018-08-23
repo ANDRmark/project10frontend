@@ -1,9 +1,9 @@
 <div>
   Login to your account: <br>
-  <label> Email: <input #emailInput type="email" value=""> </label> <br>
+  <label> User Name: <input #usernameInput type="email" value=""> </label> <br>
   <label> Password: <input #passwordInput type="password" value=""> </label> <br>
   <label >Remember me: <input #RememberMeCheckbox type="checkbox"></label>
 
   <div #loginErrors> {{ loginResultMessage }} <br></div>
-  <input type="button" value="Log in" (click)="SendLoginAndPassword(emailInput.value,passwordInput.value,RememberMeCheckbox.checked)"> <br>
+  <input type="button" value="Log in" (click)="SendLoginAndPassword(usernameInput.value,passwordInput.value,RememberMeCheckbox.checked)"> <br>
 </div>
